@@ -9,7 +9,7 @@ Drawer::Drawer(Vector2f resolution): resolution(resolution){
     window.setFramerateLimit(60);
 }
 
-void Drawer::draw_circle(float radius, const Vector2f &position) {
+void Drawer::draw_circle(float radius, const Vector2i &position) {
     sf::CircleShape shape(radius);
     shape.setPosition(position[0], position[1]);
     shape.setFillColor(sf::Color(100,250,50));
@@ -24,20 +24,34 @@ void Drawer::display() {
     window.display();
 }
 
-//void Drawer::handle_events() {
-//    sf::Event event{};
-//    auto view = get_instance();
-//    while (view->window.pollEvent(event)){
-//        if(event.type == sf::Event::Closed){
-//            ExitEvent().invoke();
-//        }
-//        if(event.type == sf::Event::MouseButtonPressed){
-//            if(event.mouseButton.button == sf::Mouse::Left){};
-//            MouseClick(
-//                    Vector2f{
-//                            float(event.mouseButton.x),
-//                            float(event.mouseButton.y)
-//                    }).invoke();
-//        }
-//    }
-//}
+std::queue<DrawerEvent> Drawer::handle_events() {
+    std::queue<DrawerEvent> events;
+    sf::Event event{};
+    while (window.pollEvent(event)){
+        Event temp;
+        switch (event.type) {
+            case sf::Event::Closed:
+                temp = Event{DrawerEvent::EventType::Exit, Event::Exit{}};
+                break;
+            case sf::Event::MouseButtonPressed:
+                temp = Event{Event::EventType::MousePressed, Event::MouseClick{
+                        event.mouseButton.button,
+                        Vector2i{event.mouseButton.x, event.mouseButton.y}
+                }};
+                break;
+            case sf::Event::MouseButtonReleased:
+                temp = Event{Event::EventType::MouseReleased, Event::MouseClick{
+                        event.mouseButton.button,
+                        Vector2i{event.mouseButton.x, event.mouseButton.y}
+                }};
+                break;
+            default:
+                break;
+        }
+        if( temp.type != Event::EventType::Invalid ) {
+            evoke(temp);
+            events.push(temp);
+        }
+    }
+    return events;
+}

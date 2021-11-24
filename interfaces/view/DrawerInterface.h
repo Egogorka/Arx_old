@@ -6,6 +6,9 @@
 #define ARX_DRAWERINTERFACE_H
 
 #include "utility/Vector.h"
+#include <queue>
+// Better to move these events somewhere else
+#include "src/view/drawer/DrawerEvents.h"
 
 namespace interfaces {
 
@@ -17,7 +20,7 @@ namespace interfaces {
          * @param radius
          * @param position
          */
-        virtual void draw_circle(float radius, const Vector2f &position) = 0;
+        virtual void draw_circle(float radius, const Vector2i &position) = 0;
 
         /**
          * Updates the window to show everything that was on screen
@@ -29,6 +32,11 @@ namespace interfaces {
          */
         virtual void clear() = 0;
 
+        /**
+         * Handles all of the events and returns a queue of them
+         * (if you want to process them yourself instead of using handlers)
+         */
+        virtual std::queue<DrawerEvent> handle_events() = 0;
     };
 
 }

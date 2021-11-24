@@ -8,7 +8,7 @@ add_executable(Arx
         src/controllers/App.cpp src/controllers/App.h
         src/view/drawer/Drawer.cpp src/view/drawer/Drawer.h
         utility/Vector.h
-        interfaces/view/DrawerInterface.h)
+        interfaces/view/DrawerInterface.h src/view/drawer/DrawerEvents.cpp src/view/drawer/DrawerEvents.h src/model/Map.cpp src/model/Map.h src/model/Square.cpp src/model/Square.h)
 
 include_directories(utility, ../Arx)
 

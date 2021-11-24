@@ -5,7 +5,8 @@
 #ifndef ARX_APP_H
 #define ARX_APP_H
 
-#include "interfaces/view/DrawerInterface.h"
+//#include "interfaces/view/DrawerInterface.h"
+#include "src/view/drawer/Drawer.h"
 #include <memory>
 
 #define RESOLUTION_X 500
@@ -14,7 +15,7 @@
 #define RESOLUTION Vector2f{RESOLUTION_X, RESOLUTION_Y}
 
 class App {
-    std::unique_ptr<interfaces::Drawer> drawer;
+    std::unique_ptr<Drawer> drawer;
 
     bool is_running;
 public:
