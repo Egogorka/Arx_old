@@ -3,17 +3,34 @@
 //
 
 #include "Drawer.h"
+#include "src/view/Color.h"
 
 Drawer::Drawer(Vector2f resolution): resolution(resolution){
     window.create(sf::VideoMode(resolution[0], resolution[1]), "Test", sf::Style::Default);
     window.setFramerateLimit(60);
 }
 
-void Drawer::draw_circle(float radius, const Vector2i &position) {
+void Drawer::draw_circle(float radius, const Vector2i &position, const Color& color) {
     sf::CircleShape shape(radius);
     shape.setPosition(position[0], position[1]);
-    shape.setFillColor(sf::Color(100,250,50));
+    shape.setFillColor(color.getSFMLColor());
     window.draw(shape);
+}
+
+void Drawer::draw_circle(float radius, const Vector2i &position) { draw_circle(radius, position, Color::Green); }
+
+void Drawer::draw_line(const Vector2i &a, const Vector2i &b, const Color &color) {
+    sf::VertexArray line{sf::Lines, 2};
+//    sf::VertexArray line[] = {
+//            sf::Vertex{sf::Vector2f{(float)a[0], (float)a[1]}},
+//            sf::Vertex{sf::Vector2f{(float)b[0], (float)b[1]}}
+//    };
+    line[0].position = sf::Vector2f{(float)a[0], (float)a[1]};
+    line[1].position = sf::Vector2f{(float)b[0], (float)b[1]};
+
+    line[0].color = color.getSFMLColor();
+    line[1].color = color.getSFMLColor();
+    window.draw(line);
 }
 
 void Drawer::clear() {
@@ -45,6 +62,10 @@ std::queue<DrawerEvent> Drawer::handle_events() {
                         Vector2i{event.mouseButton.x, event.mouseButton.y}
                 }};
                 break;
+            case sf::Event::MouseMoved:
+                temp = Event{Event::EventType::MouseMove, Event::MouseMove{
+                    Vector2i{event.mouseMove.x, event.mouseMove.y}
+                }};
             default:
                 break;
         }

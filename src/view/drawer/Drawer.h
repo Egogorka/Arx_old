@@ -25,12 +25,15 @@ public:
     Drawer(const Drawer&) = delete;
     Drawer& operator=(const Drawer&) = delete;
 
-    void draw_circle(float radius, const Vector2i& position) override;
-//    static void draw_sprite(const Sprite& sprite, const Vector2f& position);
+    void draw_circle(float radius, const Vector2i& position, const Color& color) override;
+    void draw_circle(float radius, const Vector2i& position);
+    //    static void draw_sprite(const Sprite& sprite, const Vector2f& position);
     void display() override;
     void clear() override;
 
     std::queue<DrawerEvent> handle_events() override;
+
+    void draw_line(const Vector2i &a, const Vector2i &b, const Color &color) override;
 };
 
 

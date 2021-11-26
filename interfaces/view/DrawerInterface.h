@@ -9,6 +9,7 @@
 #include <queue>
 // Better to move these events somewhere else
 #include "src/view/drawer/DrawerEvents.h"
+#include "src/view/Color.h"
 
 namespace interfaces {
 
@@ -18,9 +19,18 @@ namespace interfaces {
         /**
          * Draws a circle
          * @param radius
-         * @param position
+         * @param position (from the top left corner of the window)
+         * @param color
          */
-        virtual void draw_circle(float radius, const Vector2i &position) = 0;
+        virtual void draw_circle(float radius, const Vector2i &position, const Color& color) = 0;
+
+        /**
+         * Draws a line with specified color
+         * @param a
+         * @param b
+         * @param color
+         */
+        virtual void draw_line(const Vector2i& a, const Vector2i& b, const Color& color) = 0;
 
         /**
          * Updates the window to show everything that was on screen

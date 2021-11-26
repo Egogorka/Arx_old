@@ -91,5 +91,6 @@ public:
 typedef Vector<float,2> Vector2f;
 typedef Vector<double,2> Vector3f;
 typedef Vector<int,2> Vector2i;
+typedef Vector<int,3> Vector3i;
 
 #endif //DEFANTCE_VECTOR_H
