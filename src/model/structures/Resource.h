@@ -7,7 +7,7 @@
 
 #include "utility/Vector.h"
 
-class Resource {
+struct Resource {
     enum class Type { Wood, Stone, Fish };
 
     Vector3i position;
@@ -15,6 +15,7 @@ class Resource {
     int amount;
 
     Resource();
+    Resource(Type type);
     Resource(Type type, int amount);
     Resource(Type type, int amount, const Vector3i& vec);
 };

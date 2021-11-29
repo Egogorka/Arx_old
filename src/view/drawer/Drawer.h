@@ -34,6 +34,8 @@ public:
     std::queue<DrawerEvent> handle_events() override;
 
     void draw_line(const Vector2i &a, const Vector2i &b, const Color &color) override;
+
+    friend class View;
 };
 
 

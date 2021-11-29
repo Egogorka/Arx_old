@@ -36,8 +36,14 @@ public:
     std::list<std::shared_ptr<Object>>& get_at(const Vector3i& vec);
     std::list<std::shared_ptr<Object>>& get_at(int z, int x, int y);
 
-    void add_at(const Vector3i& vec, std::shared_ptr<Object>& object);
-    void add_at(int z, int x, int y, std::shared_ptr<Object>& object);
+    void add_at(const Vector3i& vec, std::shared_ptr<Object>&& object);
+    void add_at(int z, int x, int y, std::shared_ptr<Object>&& object);
+
+    bool empty_at(const Vector3i& vec);
+    bool empty_at(int z, int x, int y);
+
+    Cell& get_cell_at(const Vector3i& vec);
+    Cell& get_cell_at(int z, int x, int y);
 
     std::vector<std::vector<Cell>>& getZSection(unsigned int z);
 

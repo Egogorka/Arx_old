@@ -6,15 +6,18 @@
 #define ARX_ENVIRONMENT_H
 
 #include "utility/Vector.h"
+#include "src/model/Object.h"
 
-class Environment {
+struct Environment : public Object {
     enum class Type { Tree, Rock };
+
     Vector3i position;
     Type type;
 
-public:
     Environment();
     Environment(Type type, const Vector3i &position);
+
+    std::string getObjectType() override;
 };
 
 

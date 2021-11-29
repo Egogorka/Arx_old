@@ -3,3 +3,7 @@
 //
 
 #include "Object.h"
+
+std::string Object::getObjectType() {
+    return "object";
+}

@@ -14,6 +14,10 @@ Dwarf::Dwarf(Vector3i && position): Dwarf(position) {}
 
 Dwarf::Dwarf(): Dwarf(Vector3i{0,0,0}) {}
 
+std::string Dwarf::getObjectType() {
+    return "dwarf";
+}
+
 //const Vector3i &Dwarf::getPosition() const { return position; }
 //
 //int Dwarf::getHealth() const { return health; }

@@ -6,4 +6,5 @@
 
 Resource::Resource(Resource::Type type, int amount, const Vector3i& vec): type(type), amount(amount), position(vec) {}
 Resource::Resource(Resource::Type type, int amount): Resource(type, amount, Vector3i{0,0,0}) {}
-Resource::Resource(): Resource(Type::Wood, 0) {}
+Resource::Resource(Resource::Type type): Resource(type, 0) {}
+Resource::Resource(): Resource(Type::Wood) {}

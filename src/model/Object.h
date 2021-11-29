@@ -24,16 +24,16 @@
 #include <string>
 
 class Object {
+public:
     /**
      * Function to get the
      * @return
      */
-//    virtual std::string getObjectType() = 0;
+    virtual std::string getObjectType();
     /**
      * Identification number
      */
 //    long id;
-
 };
 
 

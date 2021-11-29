@@ -9,16 +9,17 @@
 #include "src/view/drawer/Drawer.h"
 #include <memory>
 
+#include "GameController.h"
+
 #define RESOLUTION_X 800
 #define RESOLUTION_Y 800
 
 #define RESOLUTION Vector2f{RESOLUTION_X, RESOLUTION_Y}
 
 class App {
-    std::unique_ptr<Drawer> drawer;
+    std::shared_ptr<Drawer> drawer;
 
-    std::vector<std::pair<float, Vector2i>> circles{};
-    std::vector<std::pair<Vector2i, Vector2i>> lines{};
+    std::unique_ptr<GameController> gameController;
 
     bool flag;
 

@@ -17,7 +17,9 @@ void Drawer::draw_circle(float radius, const Vector2i &position, const Color& co
     window.draw(shape);
 }
 
-void Drawer::draw_circle(float radius, const Vector2i &position) { draw_circle(radius, position, Color::Green); }
+void Drawer::draw_circle(float radius, const Vector2i &position) {
+    draw_circle(radius, position, Color::Green);
+}
 
 void Drawer::draw_line(const Vector2i &a, const Vector2i &b, const Color &color) {
     sf::VertexArray line{sf::Lines, 2};
