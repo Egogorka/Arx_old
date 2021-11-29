@@ -6,8 +6,9 @@
 #define ARX_DWARF_H
 
 #include "utility/Vector.h"
+#include "Object.h"
 
-class Dwarf {
+class Dwarf : public Object{
 public:
     Vector3i position;
 
@@ -27,12 +28,15 @@ public:
     int age;
 public:
 
+    std::string getObjectType() override;
+
     Dwarf();
 
     explicit Dwarf(const Vector3i &position);
     explicit Dwarf(Vector3i && position);
 
     Dwarf(const Vector3i &position, int health, int hunger, int age);
+
 
 //    [[nodiscard]] const Vector3i &getPosition() const;
 //
