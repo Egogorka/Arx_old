@@ -138,6 +138,10 @@ public:
     T& y() {
         return this->at(2);
     }
+
+    Vector<T,2> getXY() const{
+        return Vector<T,2>{this->x(), this->y()};
+    }
 };
 
 

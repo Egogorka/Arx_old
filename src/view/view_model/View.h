@@ -23,8 +23,8 @@ class View {
     sf::Texture tex_cell;
 
 public:
-    float scale = 1.2;
-    int size = 20;
+    float scale = 1;
+    int size = 40;
 
     explicit View(std::shared_ptr<Drawer> drawer);
 
@@ -32,6 +32,9 @@ public:
     void drawCell(const Cell& cell);
 
 private:
+    Vector2f getPoint(const Vector2f& vec);
+    Vector2f getPoint(const Vector2i& vec);
+
     void drawEnvironment(std::shared_ptr<Environment> environment);
     void drawStorehouse(std::shared_ptr<Storehouse> storehouse);
 //    void drawDwarf(std::shared_ptr<Resource>&& resource);
