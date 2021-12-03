@@ -13,9 +13,8 @@ GameController::GameController(std::shared_ptr<Drawer> drawer)
 }
 
 void GameController::init() {
-
-
-    int width = 20; int height = 20;
+    float width  = view->scale * view->size;
+    float height = width;
 
     // Generate 20 trees
     for (int i = 0; i < 20; ++i) {

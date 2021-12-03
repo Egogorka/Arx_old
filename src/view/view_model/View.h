@@ -12,11 +12,20 @@
 #include "src/model/structures/all.h"
 #include "src/model/Cell.h"
 
+#include <SFML/Graphics.hpp>
+
 class View {
     std::shared_ptr<Drawer> drawer;
-    int scale = 1;
+
+    sf::Texture tex_tree;
+    sf::Texture tex_stone;
+    sf::Texture tex_store;
+    sf::Texture tex_cell;
 
 public:
+    float scale = 1.2;
+    int size = 20;
+
     explicit View(std::shared_ptr<Drawer> drawer);
 
     void drawObject(std::shared_ptr<Object> object);

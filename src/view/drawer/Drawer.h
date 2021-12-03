@@ -17,6 +17,10 @@ class Drawer : public interfaces::Drawer, public Eventable<DrawerEvent>  {
 private:
     Vector2f resolution;
     sf::RenderWindow window;
+
+    sf::Vector2f get_sf_vector(const Vector2f& vec);
+    sf::Vector2f get_sf_vector(const Vector2i& vec);
+
 public:
     using Event = DrawerEvent;
 
@@ -27,7 +31,7 @@ public:
 
     void draw_circle(float radius, const Vector2i& position, const Color& color) override;
     void draw_circle(float radius, const Vector2i& position);
-    //    static void draw_sprite(const Sprite& sprite, const Vector2f& position);
+
     void display() override;
     void clear() override;
 
@@ -37,6 +41,7 @@ public:
 
     friend class View;
 };
+
 
 
 #endif //ARX_DRAWER_H
