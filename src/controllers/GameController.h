@@ -6,6 +6,7 @@
 #define ARX_GAMECONTROLLER_H
 
 #include <memory>
+using namespace std;
 
 #include "src/model/Container.h"
 
@@ -19,11 +20,13 @@
 class GameController {
 
     // Gets from parent controller
-    std::shared_ptr<Drawer> drawer;
-    std::shared_ptr<View> view;
+    shared_ptr<Drawer> drawer;
+    shared_ptr<View> view;
 
     // Makes itself
     Container container;
+
+    const int size_z = 1;
     const int size_x = 30;
     const int size_y = 30;
 
@@ -32,7 +35,7 @@ class GameController {
 //    Resource fish_resource;
 
 public:
-    explicit GameController(std::shared_ptr<Drawer> drawer);
+    explicit GameController(shared_ptr<Drawer> drawer);
 
     void init();
 

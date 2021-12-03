@@ -23,7 +23,7 @@ void GameController::init() {
         Vector3i pos{0,x,y};
         if(container.empty_at(pos))
             container.add_at(pos,
-             std::make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
+      make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
     }
 
     // Generate 30 rocks
@@ -33,12 +33,12 @@ void GameController::init() {
         Vector3i pos{0,x,y};
         if(container.empty_at(pos))
             container.add_at(pos,
-             std::make_shared<Environment>(Environment::Type::Rock, pos));
+            make_shared<Environment>(Environment::Type::Rock, pos));
     }
 
     drawer->add_event_listener(
         Drawer::Event::EventType::MousePressed,
-        std::function{[=](const Drawer::Event& event) {
+        function{[=](const Drawer::Event& event) {
             int mouse_x = event.mouseClick.position[0] / width;
             int mouse_y = event.mouseClick.position[1] / height;
             Vector3i pos{0,mouse_x,mouse_y};
@@ -75,8 +75,13 @@ void GameController::update() {
     for (int i = 0; i < size_x; ++i) {
         for (int j = 0; j < size_y; ++j) {
             Vector3i pos{0,i,j};
-
             view->drawCell(container.get_cell_at(pos));
+        }
+    }
+
+    for (int i = 0; i < size_x; ++i) {
+        for (int j = 0; j < size_y; ++j) {
+            Vector3i pos{0,i,j};
             for(auto& ptr : container.get_at(pos)){
                 view->drawObject(ptr);
             }

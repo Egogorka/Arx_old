@@ -14,30 +14,35 @@
 
 #include "utility/Vector.h"
 
+using namespace std;
+
 class Container {
 
     /**
      * Map of cells - the coordinates are z,x,y (z is height)
      */
-    std::vector<std::vector<std::vector<Cell>>> map;
+    vector<vector<vector<Cell>>> map;
 
     /**
      * Map of objects via coordinates
      */
-    std::vector<std::vector<std::vector<
-            std::list<std::shared_ptr<Object>>
-        >>> objects;
-
+    vector<vector<vector<
+        list<shared_ptr<Object>>
+    >>> objects;
+    
+    int size_z;
+    int size_x;
+    int size_y;
 public:
 
     Container();
     Container(int size_z, int size_x, int size_y);
 
-    std::list<std::shared_ptr<Object>>& get_at(const Vector3i& vec);
-    std::list<std::shared_ptr<Object>>& get_at(int z, int x, int y);
+    list<shared_ptr<Object>>& get_at(const Vector3i& vec);
+    list<shared_ptr<Object>>& get_at(int z, int x, int y);
 
-    void add_at(const Vector3i& vec, std::shared_ptr<Object>&& object);
-    void add_at(int z, int x, int y, std::shared_ptr<Object>&& object);
+    void add_at(const Vector3i& vec, shared_ptr<Object>&& object);
+    void add_at(int z, int x, int y, shared_ptr<Object>&& object);
 
     bool empty_at(const Vector3i& vec);
     bool empty_at(int z, int x, int y);
@@ -45,7 +50,7 @@ public:
     Cell& get_cell_at(const Vector3i& vec);
     Cell& get_cell_at(int z, int x, int y);
 
-    std::vector<std::vector<Cell>>& getZSection(unsigned int z);
+    vector<vector<Cell>>& getZSection(unsigned int z);
 
 // TODO: Implement iterator support
 
@@ -53,9 +58,9 @@ public:
 
 // Const methods
 
-    [[nodiscard]] const std::vector<std::vector<Cell>>& getZSection(unsigned int z) const;
-    [[nodiscard]] const std::list<std::shared_ptr<Object>>& get_at(const Vector3i& vec) const;
-    [[nodiscard]] const std::list<std::shared_ptr<Object>>& get_at(int z, int x, int y) const;
+    [[nodiscard]] const vector<vector<Cell>>& getZSection(unsigned int z) const;
+    [[nodiscard]] const list<shared_ptr<Object>>& get_at(const Vector3i& vec) const;
+    [[nodiscard]] const list<shared_ptr<Object>>& get_at(int z, int x, int y) const;
 
 };
 

@@ -4,9 +4,15 @@
 
 #include "Container.h"
 
-Container::Container():map(), objects() {}
+Container::Container()
+: map(), objects(), size_z(0), size_x(0), size_y(0) {}
 
-Container::Container(int size_z, int size_x, int size_y): Container() {
+Container::Container(int size_z, int size_x, int size_y)
+: Container() {
+    this->size_z = size_z;
+    this->size_x = size_x;
+    this->size_y = size_y;
+    
     map.resize(size_z);
     for( auto& sub_arr1 : map ){
         sub_arr1.resize(size_x);
@@ -14,6 +20,7 @@ Container::Container(int size_z, int size_x, int size_y): Container() {
             sub_arr2.reserve(size_y);
         }
     }
+
     // In case of map we also need to fill the map with proper Cells
     for (int i = 0; i < size_z; ++i) {
         for (int j = 0; j < size_x; ++j) {
@@ -22,7 +29,6 @@ Container::Container(int size_z, int size_x, int size_y): Container() {
             }
         }
     }
-
 
     objects.resize(size_z);
     for( auto& sub_arr1 : objects ){
@@ -36,31 +42,31 @@ Container::Container(int size_z, int size_x, int size_y): Container() {
 }
 
 
-std::vector<std::vector<Cell>> &Container::getZSection(unsigned int z) { return map[z]; }
+vector<vector<Cell>> &Container::getZSection(unsigned int z) { return map[z]; }
 
 
-std::list<std::shared_ptr<Object>>& Container::get_at(int z, int x, int y) { return objects[z][x][y]; }
-std::list<std::shared_ptr<Object>>& Container::get_at(const Vector3i &vec) { return get_at(vec[0], vec[1], vec[2]); }
+list<shared_ptr<Object>>& Container::get_at(int z, int x, int y) { return objects.at(z).at(x).at(y); }
+list<shared_ptr<Object>>& Container::get_at(const Vector3i &vec) { return get_at(vec[0], vec[1], vec[2]); }
 
 
-void Container::add_at(int z, int x, int y, std::shared_ptr<Object>&& object) { objects[z][x][y].push_back(object); }
-void Container::add_at(const Vector3i &vec, std::shared_ptr<Object>&& object) { add_at(vec[0], vec[1], vec[2], std::move(object)); }
+void Container::add_at(int z, int x, int y, shared_ptr<Object>&& object) { objects.at(z).at(x).at(y).push_back(object); }
+void Container::add_at(const Vector3i &vec, shared_ptr<Object>&& object) { add_at(vec[0], vec[1], vec[2], move(object)); }
 
 
-bool Container::empty_at(int z, int x, int y) { return objects[z][x][y].empty();}
+bool Container::empty_at(int z, int x, int y) { return objects.at(z).at(x).at(y).empty();}
 bool Container::empty_at(const Vector3i &vec) { return empty_at(vec[0], vec[1], vec[2]); }
 
 
-Cell &Container::get_cell_at(int z, int x, int y){ return map[z][x][y]; }
+Cell &Container::get_cell_at(int z, int x, int y){ return map.at(z).at(x).at(y); }
 Cell &Container::get_cell_at(const Vector3i &vec) { return get_cell_at(vec[0], vec[1], vec[2]);}
 
 
 // Const methods
 
-const std::vector<std::vector<Cell>> &Container::getZSection(unsigned int z) const { return map[z]; }
+const vector<vector<Cell>> &Container::getZSection(unsigned int z) const { return map[z]; }
 
 
-const std::list<std::shared_ptr<Object>> &Container::get_at(int z, int x, int y) const { return objects[z][x][y]; }
-const std::list<std::shared_ptr<Object>> &Container::get_at(const Vector3i &vec) const { return get_at(vec[0], vec[1], vec[2]); }
+const list<shared_ptr<Object>> &Container::get_at(int z, int x, int y) const { return objects.at(z).at(x).at(y); }
+const list<shared_ptr<Object>> &Container::get_at(const Vector3i &vec) const { return get_at(vec[0], vec[1], vec[2]); }
 
 
