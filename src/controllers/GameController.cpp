@@ -5,7 +5,6 @@
 #include "GameController.h"
 
 #include <memory>
-#include "src/model/structures/Environment.h"
 
 GameController::GameController(std::shared_ptr<Drawer> drawer)
 : drawer(drawer), container(1, 30, 30) {

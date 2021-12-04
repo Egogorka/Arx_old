@@ -20,7 +20,9 @@ App::App()
 
     drawer->add_event_listener(
         Drawer::Event::EventType::Exit,
-        std::function{[this](const Drawer::Event& event){ this->is_running = false; }}
+        std::function{[this](const Drawer::Event& event){
+            this->is_running = false;
+        }}
     );
 }
 
