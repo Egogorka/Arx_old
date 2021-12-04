@@ -17,9 +17,9 @@
 #define RESOLUTION Vector2f{RESOLUTION_X, RESOLUTION_Y}
 
 class App {
-    std::shared_ptr<Drawer> drawer;
+    shared_ptr<Drawer> drawer;
 
-    std::unique_ptr<GameController> gameController;
+    unique_ptr<GameController> gameController;
 
     bool flag;
 
