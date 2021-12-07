@@ -15,13 +15,13 @@ using namespace std;
 #include "src/view/drawer/Drawer.h"
 #include "src/view/drawer/DrawerEvents.h"
 
-#include "src/view/view_model/View.h"
+#include "src/view/view_model/GameView.h"
 
 class GameController {
 
     // Gets from parent controller
     shared_ptr<Drawer> drawer;
-    shared_ptr<View> view;
+    shared_ptr<GameView> view;
 
     // Makes itself
     Container container;

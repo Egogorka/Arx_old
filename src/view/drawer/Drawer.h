@@ -20,8 +20,9 @@ private:
 
     sf::Vector2f get_sf_vector(const Vector2f& vec);
     sf::Vector2f get_sf_vector(const Vector2i& vec);
-
 public:
+
+
     using Event = DrawerEvent;
 
     explicit Drawer(Vector2f resolution);
@@ -39,7 +40,7 @@ public:
 
     void draw_line(const Vector2i &a, const Vector2i &b, const Color &color) override;
 
-    friend class View;
+    friend class GameView;
 };
 
 

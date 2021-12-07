@@ -8,7 +8,7 @@
 
 GameController::GameController(std::shared_ptr<Drawer> drawer)
 : drawer(drawer), container(1, 30, 30) {
-    view = std::make_shared<View>(drawer);
+    view = std::make_shared<GameView>(drawer, container);
 }
 
 void GameController::init() {
@@ -17,8 +17,8 @@ void GameController::init() {
 
     // Generate 20 trees
     for (int i = 0; i < 20; ++i) {
-        int x = std::rand() % 30;
-        int y = std::rand() % 30;
+        int x = std::rand() % size_x;
+        int y = std::rand() % size_y;
         Vector3i pos{0,x,y};
         if(container.empty_at(pos))
             container.add_at(pos,
@@ -27,8 +27,8 @@ void GameController::init() {
 
     // Generate 30 rocks
     for (int i = 0; i < 20; ++i) {
-        int x = std::rand() % 30;
-        int y = std::rand() % 30;
+        int x = std::rand() % size_x;
+        int y = std::rand() % size_y;
         Vector3i pos{0,x,y};
         if(container.empty_at(pos))
             container.add_at(pos,
@@ -70,21 +70,10 @@ void GameController::init() {
 }
 
 void GameController::update() {
+    for(auto& unit : container)
+        view->drawCell(unit.cell);
 
-    for (int i = 0; i < size_x; ++i) {
-        for (int j = 0; j < size_y; ++j) {
-            Vector3i pos{0,i,j};
-            view->drawCell(container.get_cell_at(pos));
-        }
-    }
-
-    for (int i = 0; i < size_x; ++i) {
-        for (int j = 0; j < size_y; ++j) {
-            Vector3i pos{0,i,j};
-            for(auto& ptr : container.get_at(pos)){
-                view->drawObject(ptr);
-            }
-        }
-    }
-
+    for(auto& unit : container)
+        for(auto& ptr : unit.objects)
+            view->drawObject(ptr);
 }

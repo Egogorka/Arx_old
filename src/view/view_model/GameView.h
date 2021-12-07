@@ -2,19 +2,21 @@
 // Created by Meevere on 29.11.2021.
 //
 
-#ifndef ARX_VIEW_H
-#define ARX_VIEW_H
+#ifndef ARX_GAMEVIEW_H
+#define ARX_GAMEVIEW_H
 
 #include <memory>
 #include "src/view/drawer/Drawer.h"
 #include "src/model/Object.h"
 
 #include "src/model/structures/all.h"
+
+#include "src/model/Container.h"
 #include "src/model/Cell.h"
 
 #include <SFML/Graphics.hpp>
 
-class View {
+class GameView {
     std::shared_ptr<Drawer> drawer;
 
     sf::Texture tex_tree;
@@ -22,12 +24,16 @@ class View {
     sf::Texture tex_store;
     sf::Texture tex_cell;
 
+    // Link to container of GameController
+    const Container& container;
+
 public:
     float scale = 1;
-    int size = 40;
+    int size = 30;
 
-    explicit View(std::shared_ptr<Drawer> drawer);
+    explicit GameView(std::shared_ptr<Drawer> drawer, const Container& container);
 
+    void render();
     void drawObject(std::shared_ptr<Object> object);
     void drawCell(const Cell& cell);
 
@@ -41,4 +47,4 @@ private:
 };
 
 
-#endif //ARX_VIEW_H
+#endif //ARX_GAMEVIEW_H
