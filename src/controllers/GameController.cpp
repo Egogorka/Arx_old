@@ -70,10 +70,5 @@ void GameController::init() {
 }
 
 void GameController::update() {
-    for(auto& unit : container)
-        view->drawCell(unit.cell);
-
-    for(auto& unit : container)
-        for(auto& ptr : unit.objects)
-            view->drawObject(ptr);
+    view->render();
 }

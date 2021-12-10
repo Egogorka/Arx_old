@@ -72,7 +72,12 @@ void GameView::drawStorehouse(std::shared_ptr<Storehouse> storehouse) {
 }
 
 void GameView::render() {
+    for(auto& unit : container)
+        drawCell(unit.cell);
 
+    for(auto& unit : container)
+        for(auto& ptr : unit.objects)
+            drawObject(ptr);
 }
 
 Vector2f GameView::getPoint(const Vector2f &vec) {
