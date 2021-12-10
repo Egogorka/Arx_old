@@ -40,6 +40,7 @@ class Container {
     int size_x;
     int size_y;
 public:
+    vector<shared_ptr<Object>> objects;
 
     Container();
     Container(int size_z, int size_x, int size_y);

@@ -35,6 +35,10 @@ void GameController::init() {
             make_shared<Environment>(Environment::Type::Rock, pos));
     }
 
+    for (int i = 0; i < 10; ++i) {
+        container.objects.push_back(make_shared<Dwarf>(Vector3i{size_z / 2, size_x / 2, size_y / 2}));
+    }
+
     drawer->add_event_listener(
         Drawer::Event::EventType::MousePressed,
         function{[=](const Drawer::Event& event) {
@@ -70,5 +74,22 @@ void GameController::init() {
 }
 
 void GameController::update() {
+    for(auto& item : container.objects){
+        item->update();
+        if(item->getObjectType() == "dwarf"){
+            auto temp = static_pointer_cast<Dwarf>(item);
+            if(temp->position.x() >= size_x)
+                temp->position.x() = size_x - 1;
+            if(temp->position.y() >= size_y)
+                temp->position.y() = size_y - 1;
+
+            if(temp->position.x() < 0)
+                temp->position.x() = 0;
+            if(temp->position.y() < 0)
+                temp->position.y() = 0;
+        }
+    }
+
+
     view->render();
 }

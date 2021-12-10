@@ -10,9 +10,10 @@
 #include "src/model/Object.h"
 
 #include "src/model/structures/all.h"
+#include "src/model/Dwarf.h"
+#include "src/model/Cell.h"
 
 #include "src/model/Container.h"
-#include "src/model/Cell.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -23,13 +24,14 @@ class GameView {
     sf::Texture tex_stone;
     sf::Texture tex_store;
     sf::Texture tex_cell;
+    sf::Texture tex_dwarf;
 
     // Link to container of GameController
     const Container& container;
 
 public:
     float scale = 1;
-    int size = 30;
+    int size = 20;
 
     explicit GameView(std::shared_ptr<Drawer> drawer, const Container& container);
 
@@ -43,7 +45,7 @@ private:
 
     void drawEnvironment(std::shared_ptr<Environment> environment);
     void drawStorehouse(std::shared_ptr<Storehouse> storehouse);
-//    void drawDwarf(std::shared_ptr<Resource>&& resource);
+    void drawDwarf(std::shared_ptr<Dwarf> dwarf);
 };
 
 

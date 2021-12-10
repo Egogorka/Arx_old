@@ -9,15 +9,22 @@ GameView::GameView(std::shared_ptr<Drawer> drawer, const Container& container) :
     tex_stone.loadFromFile("../assets/Stone.png");
     tex_store.loadFromFile("../assets/Store.png");
     tex_cell.loadFromFile("../assets/Grass.png");
+    tex_dwarf.loadFromFile("../assets/Dwarf.png");
 }
 
 
 void GameView::drawObject(std::shared_ptr<Object> object) {
-    if(auto ptr1 = std::dynamic_pointer_cast<Environment>(object)){
-        drawEnvironment(ptr1);
+    if(object->getObjectType() == "environment"){
+        auto ptr = std::static_pointer_cast<Environment>(object);
+        drawEnvironment(ptr);
     } else
-    if(auto ptr2 = std::dynamic_pointer_cast<Storehouse>(object)){
-        drawStorehouse(ptr2);
+    if(object->getObjectType() == "storehouse"){
+        auto ptr = std::static_pointer_cast<Storehouse>(object);
+        drawStorehouse(ptr);
+    }
+    if(object->getObjectType() == "dwarf"){
+        auto ptr = std::static_pointer_cast<Dwarf>(object);
+        drawDwarf(ptr);
     }
 }
 
@@ -71,6 +78,21 @@ void GameView::drawStorehouse(std::shared_ptr<Storehouse> storehouse) {
     drawer->window.draw(sprite);
 }
 
+void GameView::drawDwarf(std::shared_ptr<Dwarf> dwarf) {
+    sf::Sprite sprite;
+    sprite.setTexture(tex_dwarf);
+    sprite.setTextureRect(sf::IntRect{5,10,30-5,30-10});
+
+    auto temp = getPoint(dwarf->position.getXY());
+    auto box = sprite.getLocalBounds();
+
+//    sprite.setOrigin(box.width/2, box.height/2);
+    sprite.setScale(scale*0.9,scale*0.9);
+    sprite.setPosition(drawer->get_sf_vector(temp));
+
+    drawer->window.draw(sprite);
+}
+
 void GameView::render() {
     for(auto& unit : container)
         drawCell(unit.cell);
@@ -78,6 +100,9 @@ void GameView::render() {
     for(auto& unit : container)
         for(auto& ptr : unit.objects)
             drawObject(ptr);
+
+    for(auto& obj : container.objects)
+        drawObject(obj);
 }
 
 Vector2f GameView::getPoint(const Vector2f &vec) {

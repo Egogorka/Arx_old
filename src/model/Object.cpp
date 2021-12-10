@@ -7,3 +7,7 @@
 std::string Object::getObjectType() {
     return "object";
 }
+
+void Object::update() {
+    return;
+}

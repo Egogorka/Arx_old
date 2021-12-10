@@ -18,6 +18,14 @@ std::string Dwarf::getObjectType() {
     return "dwarf";
 }
 
+void Dwarf::update() {
+    int d100 = rand() % 100;
+    if ( d100 > 90 ){
+        Vector3i rand_vector{rand() % 3 - 1, rand() % 3 - 1, rand() % 3 - 1};
+        position += rand_vector;
+    }
+}
+
 //const Vector3i &Dwarf::getPosition() const { return position; }
 //
 //int Dwarf::getHealth() const { return health; }

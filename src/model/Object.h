@@ -34,6 +34,8 @@ public:
      * Identification number
      */
 //    long id;
+
+    virtual void update();
 };
 
 

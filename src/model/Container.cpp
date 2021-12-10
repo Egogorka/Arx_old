@@ -14,7 +14,7 @@ void ContainerUnit::add(shared_ptr<Object> &&object) {
 }
 
 Container::Container()
-: map(), size_z(0), size_x(0), size_y(0) {}
+: map(), size_z(0), size_x(0), size_y(0), objects() {}
 
 Container::Container(int _size_z, int _size_x, int _size_y)
 : Container() {
