@@ -48,6 +48,9 @@ list<shared_ptr<Object>>& Container::get_at(const Vector3i &vec) { return get_at
 ContainerUnit &Container::get(int z, int x, int y) { return map[z][x][y]; }
 ContainerUnit &Container::get(const Vector3i &vec) { return get(vec.z(), vec.x(), vec.y());}
 
+const ContainerUnit &Container::get(int z, int x, int y) const { return map[z][x][y]; }
+const ContainerUnit &Container::get(const Vector3i &vec) const { return get(vec.z(), vec.x(), vec.y());}
+
 void Container::add_at(int z, int x, int y, shared_ptr<Object>&& object) { map[z][x][y].add(move(object)); }
 void Container::add_at(const Vector3i &vec, shared_ptr<Object>&& object) { add_at(vec[0], vec[1], vec[2], move(object)); }
 
@@ -87,6 +90,20 @@ Container::Iterator &Container::Iterator::operator=(const Container::Iterator &i
 
 Container::Iterator::Iterator(Vector3i &&pos, Container &container): Container::Iterator(pos, container) {}
 
+// Const iterator ones
+
+Container::ConstIterator::ConstIterator(const Vector3i &pos, const Container &container)
+        : pos(pos), container(&container) {}
+
+
+Container::ConstIterator::ConstIterator(const Container::ConstIterator &it)
+        : pos(it.pos), container(it.container) {}
+
+
+Container::ConstIterator &Container::ConstIterator::operator=(const Container::ConstIterator &it) = default;
+
+
+Container::ConstIterator::ConstIterator(Vector3i &&pos, const Container &container): Container::ConstIterator(pos, container) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Methods
@@ -112,12 +129,41 @@ const Container::Iterator Container::Iterator::operator++(int) {
     return tmp;
 }
 
-Container::Iterator::reference Container::Iterator::operator*() {
+Container::Iterator::reference Container::Iterator::operator*() const {
     return container->get(pos);
 }
 
 bool operator==(const Container::Iterator &a, const Container::Iterator &b) { return a.pos == b.pos; }
 bool operator!=(const Container::Iterator &a, const Container::Iterator &b) { return a.pos != b.pos; }
+
+// Const iterator methods
+
+Container::ConstIterator Container::ConstIterator::operator++() {
+    if(++pos.x() < container->size_x) return *this;
+    pos.x() = 0;
+    if(++pos.y() < container->size_y) return *this;
+    pos.y() = 0;
+    if(++pos.z() < container->size_z) return *this;
+    // If we pass each if-statement - then we are at the end of container
+    *this = container->end();
+    return *this;
+}
+
+
+Container::ConstIterator::pointer Container::ConstIterator::operator->() { return &container->get(pos); }
+
+const Container::ConstIterator Container::ConstIterator::operator++(int) {
+    ConstIterator tmp = *this;
+    ++(*this);
+    return tmp;
+}
+
+Container::ConstIterator::reference Container::ConstIterator::operator*() const {
+    return container->get(pos);
+}
+
+bool operator==(const Container::ConstIterator &a, const Container::ConstIterator &b) { return a.pos == b.pos; }
+bool operator!=(const Container::ConstIterator &a, const Container::ConstIterator &b) { return a.pos != b.pos; }
 
 
 Container::Iterator Container::begin() {
@@ -126,6 +172,14 @@ Container::Iterator Container::begin() {
 
 Container::Iterator Container::end() {
     return Container::Iterator(Vector3i{size_z,size_x,size_y}, *this);
+}
+
+Container::ConstIterator Container::begin() const {
+    return Container::ConstIterator{Vector3i{0,0,0}, *this};
+}
+
+Container::ConstIterator Container::end() const {
+    return Container::ConstIterator(Vector3i{size_z,size_x,size_y}, *this);
 }
 
 

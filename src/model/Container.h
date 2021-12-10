@@ -59,7 +59,10 @@ public:
     Cell& get_cell_at(const Vector3i& vec);
     Cell& get_cell_at(int z, int x, int y);
 
-    struct Iterator {
+    class Iterator {
+        Vector3i pos;
+        Container* container;
+    public:
         using iterator_category = std::forward_iterator_tag;
         using value_type        = ContainerUnit;
         using pointer           = ContainerUnit*;
@@ -71,7 +74,7 @@ public:
         Iterator(const Iterator& it);
         Iterator& operator=(const Iterator& it);
 
-        reference operator*();
+        reference operator*() const;
         pointer operator->();
 
         Iterator operator++();
@@ -79,19 +82,46 @@ public:
 
         friend bool operator== (const Iterator& a, const Iterator& b);
         friend bool operator!= (const Iterator& a, const Iterator& b);
+    };
 
-    private:
+    class ConstIterator {
         Vector3i pos;
-        Container* container;
+        const Container* container;
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type        = ContainerUnit;
+        using pointer           = const ContainerUnit*;
+        using reference         = const ContainerUnit&;
+
+        ConstIterator(const Vector3i& pos, const Container& container);
+        ConstIterator(Vector3i&& pos, const Container& container);
+
+        ConstIterator(const ConstIterator& it);
+        ConstIterator& operator=(const ConstIterator& it);
+
+        reference operator*() const;
+        pointer operator->();
+
+        ConstIterator operator++();
+        const ConstIterator operator++(int);
+
+        friend bool operator== (const ConstIterator& a, const ConstIterator& b);
+        friend bool operator!= (const ConstIterator& a, const ConstIterator& b);
     };
 
     Iterator begin();
     Iterator end();
 
+    ConstIterator begin() const;
+    ConstIterator end() const;
+
 // Const methods
 
     [[nodiscard]] const list<shared_ptr<Object>>& get_at(const Vector3i& vec) const;
     [[nodiscard]] const list<shared_ptr<Object>>& get_at(int z, int x, int y) const;
+
+    [[nodiscard]] const ContainerUnit& get(int z, int x, int y) const;
+    [[nodiscard]] const ContainerUnit& get(const Vector3i& vec) const;
 
 };
 
