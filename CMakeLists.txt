@@ -3,6 +3,18 @@ project(Arx)
 
 set(CMAKE_CXX_STANDARD 17)
 
+include(FetchContent)
+
+FetchContent_Declare(json
+        GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git
+        GIT_TAG v3.7.3)
+
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+    FetchContent_Populate(json)
+    add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
 add_executable(Arx
         main.cpp
         src/controllers/App.cpp src/controllers/App.h
@@ -20,4 +32,4 @@ endif()
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
-target_link_libraries(Arx sfml-graphics sfml-audio)
+target_link_libraries(Arx PRIVATE sfml-graphics sfml-audio nlohmann_json::nlohmann_json)
