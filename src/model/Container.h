@@ -59,6 +59,19 @@ public:
     Cell& get_cell_at(const Vector3i& vec);
     Cell& get_cell_at(int z, int x, int y);
 
+    // Const methods
+
+    [[nodiscard]] const list<shared_ptr<Object>>& get_at(const Vector3i& vec) const;
+    [[nodiscard]] const list<shared_ptr<Object>>& get_at(int z, int x, int y) const;
+
+    [[nodiscard]] const ContainerUnit& get(int z, int x, int y) const;
+    [[nodiscard]] const ContainerUnit& get(const Vector3i& vec) const;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Iterator support
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Usual iterator
+
     class Iterator {
         Vector3i pos;
         Container* container;
@@ -84,6 +97,8 @@ public:
         friend bool operator!= (const Iterator& a, const Iterator& b);
     };
 
+    // ATTENTION
+    // Code is just copied from Iterator - so if Iterator is in need of change - the so is the ConstIterator
     class ConstIterator {
         Vector3i pos;
         const Container* container;
@@ -114,15 +129,6 @@ public:
 
     ConstIterator begin() const;
     ConstIterator end() const;
-
-// Const methods
-
-    [[nodiscard]] const list<shared_ptr<Object>>& get_at(const Vector3i& vec) const;
-    [[nodiscard]] const list<shared_ptr<Object>>& get_at(int z, int x, int y) const;
-
-    [[nodiscard]] const ContainerUnit& get(int z, int x, int y) const;
-    [[nodiscard]] const ContainerUnit& get(const Vector3i& vec) const;
-
 };
 
 
