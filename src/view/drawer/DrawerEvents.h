@@ -7,6 +7,7 @@
 
 #include "utility/Vector.h"
 #include <SFML/Window/Mouse.hpp>
+#include <SFML/Window/Event.hpp>
 
 struct DrawerEvent {
 
@@ -20,6 +21,17 @@ struct DrawerEvent {
         MouseClick(MouseButton button, const Vector2i &position);
         // SFML Support
         MouseClick(sf::Mouse::Button button, const Vector2i &position);
+    };
+
+    struct MouseScroll {
+        MouseScroll(const MouseScroll &scroll);
+
+        Vector2i position;
+        float delta;
+
+        MouseScroll(float delta, const Vector2i &position);
+        // SFML Support
+        MouseScroll(const sf::Event::MouseWheelScrollEvent& scroll);
     };
 
 
@@ -37,6 +49,7 @@ struct DrawerEvent {
         MouseMove,
         MousePressed,
         MouseReleased,
+        MouseScroll,
         Exit,
         Invalid
     };
@@ -45,13 +58,17 @@ struct DrawerEvent {
     union {
         MouseClick mouseClick;
         MouseMove mouseMove;
+        MouseScroll mouseScroll;
         Exit exit;
     };
+
+    DrawerEvent();
+    DrawerEvent(const DrawerEvent& event);
 
     DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::Exit &exit);
     DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::MouseMove &mouseMove);
     DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::MouseClick &mouseClick);
-    DrawerEvent();
+    DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::MouseScroll &mouseScroll);
 };
 
 
