@@ -62,6 +62,8 @@ public:
 
     // Const methods
 
+    Vector3i getSize() const;
+
     [[nodiscard]] const list<shared_ptr<Object>>& get_at(const Vector3i& vec) const;
     [[nodiscard]] const list<shared_ptr<Object>>& get_at(int z, int x, int y) const;
 

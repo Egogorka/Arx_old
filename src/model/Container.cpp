@@ -67,6 +67,9 @@ Cell &Container::get_cell_at(const Vector3i &vec) { return get_cell_at(vec[0], v
 
 // Const methods
 
+Vector3i Container::getSize() const {
+    return {size_z, size_x, size_y};
+}
 
 const list<shared_ptr<Object>> &Container::get_at(int z, int x, int y) const { return map[z][x][y].objects; }
 const list<shared_ptr<Object>> &Container::get_at(const Vector3i &vec) const { return get_at(vec[0], vec[1], vec[2]); }
