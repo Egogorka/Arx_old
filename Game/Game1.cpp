@@ -271,21 +271,21 @@ int main()
 
 
     Texture texTree;
-    texTree.loadFromFile("D:\\Game\\Tree2.png");
+    texTree.loadFromFile("C:\\Users\\ACER\\Arx\\Game\\Texture\\Tree2.png");
 
     Texture texStone;
-    texStone.loadFromFile("D:\\Game\\Stone.png");
+    texStone.loadFromFile("C:\\Users\\ACER\\Arx\\Game\\Texture\\Stone.png");
 
 
 
     Texture texStore;
-    texStore.loadFromFile("D:\\Game\\Store.png");
+    texStore.loadFromFile("C:\\Users\\ACER\\Arx\\Game\\Texture\\Store.png");
 
     Texture texTower;
-    texTower.loadFromFile("D:\\Game\\Range.png");
+    texTower.loadFromFile("C:\\Users\\ACER\\Arx\\Game\\Texture\\Range.png");
 
     Texture texBook;
-    texBook.loadFromFile("D:\\Game\\Book.png");
+    texBook.loadFromFile("C:\\Users\\ACER\\Arx\\Game\\Texture\\Book.png");
     Sprite Book(texBook);
 
     Book.setPosition(0,0);
