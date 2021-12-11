@@ -9,9 +9,7 @@
 #include "Object.h"
 
 class Dwarf : public Object{
-public:
-    Vector3i position;
-
+private:
     /**
      * Default range of health - 0 to 1000
      */
@@ -27,6 +25,7 @@ public:
      */
     int age;
 public:
+    Vector3i position;
 
     std::string getObjectType() override;
 
@@ -37,14 +36,7 @@ public:
 
     Dwarf(const Vector3i &position, int health, int hunger, int age);
 
-
-//    [[nodiscard]] const Vector3i &getPosition() const;
-//
-//    [[nodiscard]] int getHealth() const;
-//
-//    [[nodiscard]] int getHunger() const;
-//
-//    [[nodiscard]] int getAge() const;
+    void update() override;
 };
 
 
