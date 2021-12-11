@@ -68,6 +68,9 @@ std::queue<DrawerEvent> Drawer::handle_events() {
                 temp = Event{Event::EventType::MouseMove, Event::MouseMove{
                     Vector2i{event.mouseMove.x, event.mouseMove.y}
                 }};
+                break;
+            case sf::Event::MouseWheelScrolled:
+                temp = Event{Event::EventType::MouseScroll, Event::MouseScroll{event.mouseWheelScroll}};
             default:
                 break;
         }
