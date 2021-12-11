@@ -99,7 +99,7 @@ public:
      * There we throw/evoke event to all event handlers
      * @param e
      */
-    void evoke(CEvent e){
+    void evoke(const CEvent& e){
         for( auto& func : event_listeners ){
             func(e);
         }
