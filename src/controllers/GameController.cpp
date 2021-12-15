@@ -20,9 +20,9 @@ void GameController::init() {
         int x = std::rand() % size_x;
         int y = std::rand() % size_y;
         Vector3i pos{0,x,y};
-        if(container.empty_at(pos))
-            container.add_at(pos,
-      make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
+        if(container.get(pos).objects.empty())
+            container.get(pos).objects.emplace_back(
+            make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
     }
 
     // Generate 30 rocks
@@ -30,8 +30,8 @@ void GameController::init() {
         int x = std::rand() % size_x;
         int y = std::rand() % size_y;
         Vector3i pos{0,x,y};
-        if(container.empty_at(pos))
-            container.add_at(pos,
+        if(container.get(pos).objects.empty())
+            container.get(pos).objects.emplace_back(
             make_shared<Environment>(Environment::Type::Rock, pos));
     }
 
@@ -44,11 +44,12 @@ void GameController::init() {
         function{[=](const Drawer::Event& event) {
             int mouse_x = event.mouseClick.position[0] / width;
             int mouse_y = event.mouseClick.position[1] / height;
+            Vector2f pos_f{(float)event.mouseClick.position.x(), (float)event.mouseClick.position.y()};
             Vector3i pos{0,mouse_x,mouse_y};
 
             // Harvesting of resources
             if (event.mouseClick.button == DrawerEvent::MouseClick::MouseButton::Left) {
-                if (auto ptr = std::dynamic_pointer_cast<Environment>(container.get_at(pos).front())) {
+                if (auto ptr = std::dynamic_pointer_cast<Environment>(container.get(pos).objects.front())) {
                     switch (ptr->type) {
                         case Environment::Type::Rock:
                             this->stone_resource.amount += 1;
@@ -60,14 +61,14 @@ void GameController::init() {
                             break;
                     }
                     // Delete the environment at point;
-                    container.get_at(pos).pop_front();
+                    container.get(pos).objects.pop_front();
                 }
             } else
 
             // Building Storehouses
             if (event.mouseClick.button == DrawerEvent::MouseClick::MouseButton::Right) {
                 if(this->wood_resource.amount > 5)
-                    container.add_at(pos, std::make_shared<Storehouse>(pos));
+                    container.get(pos).objects.emplace_back(std::make_shared<Storehouse>(pos));
             }
         }}
     );

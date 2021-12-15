@@ -41,38 +41,17 @@ Container::Container(int _size_z, int _size_x, int _size_y)
     }
 }
 
-
-list<shared_ptr<Object>>& Container::get_at(int z, int x, int y) { return map[z][x][y].objects; }
-list<shared_ptr<Object>>& Container::get_at(const Vector3i &vec) { return get_at(vec[0], vec[1], vec[2]); }
-
 ContainerUnit &Container::get(int z, int x, int y) { return map[z][x][y]; }
 ContainerUnit &Container::get(const Vector3i &vec) { return get(vec.z(), vec.x(), vec.y());}
 
 const ContainerUnit &Container::get(int z, int x, int y) const { return map[z][x][y]; }
 const ContainerUnit &Container::get(const Vector3i &vec) const { return get(vec.z(), vec.x(), vec.y());}
 
-void Container::add_at(int z, int x, int y, shared_ptr<Object>&& object) { map[z][x][y].add(move(object)); }
-void Container::add_at(const Vector3i &vec, shared_ptr<Object>&& object) { add_at(vec[0], vec[1], vec[2], move(object)); }
-
-
-bool Container::empty_at(int z, int x, int y) { return map[z][x][y].objects.empty();}
-bool Container::empty_at(const Vector3i &vec) { return empty_at(vec[0], vec[1], vec[2]); }
-
-
-Cell &Container::get_cell_at(int z, int x, int y){
-    return map[z][x][y].cell;
-}
-Cell &Container::get_cell_at(const Vector3i &vec) { return get_cell_at(vec[0], vec[1], vec[2]);}
-
-
 // Const methods
 
 Vector3i Container::getSize() const {
     return {size_z, size_x, size_y};
 }
-
-const list<shared_ptr<Object>> &Container::get_at(int z, int x, int y) const { return map[z][x][y].objects; }
-const list<shared_ptr<Object>> &Container::get_at(const Vector3i &vec) const { return get_at(vec[0], vec[1], vec[2]); }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Iterator support

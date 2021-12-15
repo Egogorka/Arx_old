@@ -48,24 +48,9 @@ public:
     ContainerUnit& get(int z, int x, int y);
     ContainerUnit& get(const Vector3i& vec);
 
-    list<shared_ptr<Object>>& get_at(const Vector3i& vec);
-    list<shared_ptr<Object>>& get_at(int z, int x, int y);
-
-    void add_at(const Vector3i& vec, shared_ptr<Object>&& object);
-    void add_at(int z, int x, int y, shared_ptr<Object>&& object);
-
-    bool empty_at(const Vector3i& vec);
-    bool empty_at(int z, int x, int y);
-
-    Cell& get_cell_at(const Vector3i& vec);
-    Cell& get_cell_at(int z, int x, int y);
-
     // Const methods
 
     Vector3i getSize() const;
-
-    [[nodiscard]] const list<shared_ptr<Object>>& get_at(const Vector3i& vec) const;
-    [[nodiscard]] const list<shared_ptr<Object>>& get_at(int z, int x, int y) const;
 
     [[nodiscard]] const ContainerUnit& get(int z, int x, int y) const;
     [[nodiscard]] const ContainerUnit& get(const Vector3i& vec) const;
@@ -133,6 +118,7 @@ public:
     ConstIterator begin() const;
     ConstIterator end() const;
 };
+
 
 
 #endif //ARX_CONTAINER_H
