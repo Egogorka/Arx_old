@@ -23,8 +23,9 @@ void Dwarf::update() {
     if (d100 < 90) return;
 
     if(path.empty()) {
-        Vector3i rand_vector{rand() % 3 - 1, rand() % 3 - 1, rand() % 3 - 1};
+        Vector3i rand_vector{0, rand() % 3 - 1, rand() % 3 - 1};
         position += rand_vector;
+
     } else {
         auto temp = path.front();
         position = Vector3i{0, temp.x(), temp.y()};

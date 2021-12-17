@@ -6,32 +6,60 @@
 
 #include <memory>
 
+#include "utility/PerlinNoise.h"
+
 GameController::GameController(std::shared_ptr<Drawer> drawer)
-: drawer(drawer), container(1, 30, 30) {
+: drawer(drawer), container(1, 60, 60) {
     view = std::make_shared<GameView>(drawer, container);
 }
 
 void GameController::init() {
 
+    std::vector<std::vector<float>> seed2D(256);
+    for (auto& elem : seed2D){
+        elem = std::vector<float>(256);
+        for (auto& elem1 : elem){
+            elem1 = (float)rand() / (float)RAND_MAX;
+        }
+    }
+    auto noise = PerlinNoise2D(seed2D, 5, 1.0f);
+
+
+
     // Generate 20 trees
-    for (int i = 0; i < 20; ++i) {
-        int x = std::rand() % size_x;
-        int y = std::rand() % size_y;
-        Vector3i pos{0,x,y};
-        if(container.get(pos).objects.empty())
+//    for (int i = 0; i < 20; ++i) {
+//        int x = std::rand() % size_x;
+//        int y = std::rand() % size_y;
+//        Vector3i pos{0,x,y};
+//        if(container.get(pos).objects.empty())
+//            container.get(pos).objects.emplace_back(
+//            make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
+//    }
+    for(auto& unit : container){
+        auto pos = unit.pos;
+        if( noise[pos.x()][pos.y()] < 0.5f + 0.2f * (float)rand() / (float)RAND_MAX){
             container.get(pos).objects.emplace_back(
             make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
+        }
     }
 
-    // Generate 30 rocks
-    for (int i = 0; i < 20; ++i) {
-        int x = std::rand() % size_x;
-        int y = std::rand() % size_y;
-        Vector3i pos{0,x,y};
-        if(container.get(pos).objects.empty())
+    for(auto& unit : container){
+        auto pos = unit.pos;
+        if( noise[pos.x()][pos.y()] < 0.5f + 0.1f * (float)rand() / (float)RAND_MAX){
             container.get(pos).objects.emplace_back(
-            make_shared<Environment>(Environment::Type::Rock, pos));
+                    make_shared<Environment>(Environment(Environment::Type::Rock, pos)));
+        }
     }
+
+//    // Generate 30 rocks
+//    for (int i = 0; i < 20; ++i) {
+//        int x = std::rand() % size_x;
+//        int y = std::rand() % size_y;
+//        Vector3i pos{0,x,y};
+//        if(container.get(pos).objects.empty())
+//            container.get(pos).objects.emplace_back(
+//            make_shared<Environment>(Environment::Type::Rock, pos));
+//    }
 
     for (int i = 0; i < 10; ++i) {
         container.objects.push_back(make_shared<Dwarf>(Vector3i{size_z / 2, size_x / 2, size_y / 2}));
@@ -99,19 +127,29 @@ void GameController::init() {
 }
 
 void GameController::update() {
-    for(auto& item : container.objects){
-        item->update();
-        if(item->getObjectType() == "dwarf"){
-            auto temp = static_pointer_cast<Dwarf>(item);
-            if(temp->position.x() >= size_x)
-                temp->position.x() = size_x - 1;
-            if(temp->position.y() >= size_y)
-                temp->position.y() = size_y - 1;
+    vector<Vector3i> previous_positions(container.objects.size());
 
-            if(temp->position.x() < 0)
-                temp->position.x() = 0;
-            if(temp->position.y() < 0)
-                temp->position.y() = 0;
+    for (int i = 0; i < container.objects.size(); ++i) {
+        if (container.objects[i]->getObjectType() == "dwarf") {
+            auto temp = static_pointer_cast<Dwarf>(container.objects[i]);
+            previous_positions[i] = temp->position;
+        }
+    }
+
+    for (int i = 0; i < container.objects.size(); ++i) {
+        auto& item = container.objects[i];
+        if(item->getObjectType() == "dwarf"){
+
+            item->update();
+
+            auto temp = static_pointer_cast<Dwarf>(item);
+            if( temp->position.x() >= size_x ||
+                temp->position.y() >= size_y ||
+                temp->position.x() < 0 ||
+                temp->position.y() < 0 ||
+                !container.get(temp->position).objects.empty()) {
+                temp->position = previous_positions[i];
+            }
         }
     }
 

@@ -14,6 +14,8 @@ std::vector<float> PerlinNoise1D( const std::vector<float>& seed, int nOctaves, 
 
         for (int j = 0; j < nOctaves; ++j) {
             int nPitch = seed.size() >> j;
+            if(nPitch == 0) continue;
+
             int nSample1 = (x / nPitch) * nPitch;
             int nSample2 = (nSample1 + nPitch) % seed.size();
 
@@ -45,6 +47,8 @@ std::vector<std::vector<float>> PerlinNoise2D( const std::vector<std::vector<flo
 
             for (int j = 0; j < nOctaves; ++j) {
                 int nPitch = seed.size() >> j;
+                if(nPitch == 0) continue;
+
                 int nSampleX1 = (x / nPitch) * nPitch;
                 int nSampleY1 = (y / nPitch) * nPitch;
 
@@ -164,7 +168,7 @@ int testNoise() {
             for (int i = 0; i < noise.size(); ++i) {
                 for (int j = 0; j < noise[0].size(); ++j) {
                     sf::RectangleShape rec;
-//            std::cout << noise[i] << '\n';
+                    std::cout << noise[i][j] << '\n';
                     unsigned char temp = (unsigned char)(512 * noise[i][j]) % 255;
                     rec.setFillColor(sf::Color{temp, temp, temp});
                     rec.setSize(sf::Vector2f(2, 2));
