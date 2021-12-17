@@ -12,5 +12,6 @@
 std::vector<float> PerlinNoise1D( const std::vector<float>& seed, int nOctaves );
 //std::vector<float> PerlinNoise2D( const std::vector<float>& seed, int nOctaves )
 
+int testNoise();
 
 #endif //ARX_PERLINNOISE_H
