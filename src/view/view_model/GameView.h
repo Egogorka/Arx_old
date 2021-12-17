@@ -29,9 +29,18 @@ class GameView {
     // Link to container of GameController
     const Container& container;
 
-public:
     float scale = 1;
+public:
+
+    /**
+     * Size of cells in pixels
+     */
     int size = 20;
+
+    /**
+     * Position of a left-upper corner of the field
+     */
+    Vector2f offset{0,0};
 
     explicit GameView(std::shared_ptr<Drawer> drawer, const Container& container);
 
@@ -39,10 +48,15 @@ public:
     void drawObject(std::shared_ptr<Object> object);
     void drawCell(const Cell& cell);
 
-private:
-    Vector2f getPoint(const Vector2f& vec);
-    Vector2f getPoint(const Vector2i& vec);
+    Vector2i fromWindow2Model( const Vector2f& pos ) const;
+    Vector2f fromModel2Window( const Vector2i& pos ) const;
 
+    Vector2i fromWindow2Model( float x, float y ) const;
+    Vector2f fromModel2Window( int x, int y ) const;
+
+    void scale(float scale);
+
+private:
     void drawEnvironment(std::shared_ptr<Environment> environment);
     void drawStorehouse(std::shared_ptr<Storehouse> storehouse);
     void drawDwarf(std::shared_ptr<Dwarf> dwarf);

@@ -49,3 +49,7 @@ std::vector<float> PerlinNoise2D( const std::vector<float>& seed, int nOctaves )
     }
     return std::move(output);
 }
+
+int testNoise() {
+
+}

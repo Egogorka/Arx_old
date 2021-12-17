@@ -4,14 +4,10 @@
 
 #include "utility/PerlinNoise.h"
 
+#include <SFML/Graphics.hpp>
+
 int main() {
-//    App app{};
-//
-//    app.loop();
+    App app{};
 
-    vector<float> seed(256);
-    for (auto& elem : seed){
-        elem = std::rand();
-    }
-
+    app.loop();
 }

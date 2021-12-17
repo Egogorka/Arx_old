@@ -9,13 +9,8 @@
 
 #include <vector>
 
-
-
-class PerlinNoise {
-
-
-
-};
+std::vector<float> PerlinNoise1D( const std::vector<float>& seed, int nOctaves );
+//std::vector<float> PerlinNoise2D( const std::vector<float>& seed, int nOctaves )
 
 
 #endif //ARX_PERLINNOISE_H
