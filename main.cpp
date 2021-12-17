@@ -9,7 +9,7 @@ int main() {
     //App app{};
 
     //app.loop();
-    Test();
+
 
 //    vector<float> seed(256);
 //    for (auto& elem : seed){

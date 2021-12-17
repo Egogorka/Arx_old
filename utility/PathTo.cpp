@@ -41,6 +41,45 @@ list <Vector2i> PathTo (Vector2i start, Vector2i end, vector<vector<int>>& array
 {
     array[start.x()][ start.y()] = 1;
     Recursion(start, 0, array);
+    int m = array[0].size();
+    int n = array.size();
+
+    Vector2i current = end;
+    list <Vector2i> path;
+    Vector2i nextposition = current;
+    path.push_back(end);
+    int minemum = 10000;
+    while (current.x() != start.x() and current.y() != start.y())
+    {
+
+
+        minemum = 10000;
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                if (i == 0 && j == 0) continue;
+
+                Vector2i newposition = current + Vector2i {i,j};
+
+                if (newposition.x() < 0 || newposition.y() < 0 || newposition.x() >= n || newposition.y() >= m) continue;
+                if (array[newposition.x()][newposition.y()] == -2 ) continue;
+                if (array[newposition.x()][ newposition.y()] < minemum)
+                {
+                    nextposition = newposition;
+                    minemum = array[newposition.x()][ newposition.y()];
+                }
+            }
+        }
+        current = nextposition;
+        path.push_back(current);
+        cout << current << endl;
+
+    }
+
+    path.push_back(start);
+    path.reverse();
+    return path;
 
     return {};
 }
@@ -48,6 +87,7 @@ int Test()
 {
     int n = 5;
     int m = 5;
+   list<Vector2i> list1;
     vector<vector<int>> vector_test {
         {-1,-1,-1,-1,-1},
         {-1,-2,-2,-2,-1},
@@ -55,7 +95,8 @@ int Test()
         {-1,-2,-2,-2,-1},
         {-1,-1,-1,-1,-1}
     };
-    PathTo(Vector2i {2,2},Vector2i {4,4},vector_test);
+
+    list1 = PathTo(Vector2i {0,0},Vector2i {4,4},vector_test);
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; ++j)
@@ -64,7 +105,12 @@ int Test()
         }
         cout << endl;
     }
+    cout << endl;
 
+    for (auto &x : list1)
+    {
+        cout  << x << endl;
+    }
 
 
 
