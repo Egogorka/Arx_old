@@ -37,19 +37,22 @@ void GameController::init() {
 //    }
     for(auto& unit : container){
         auto pos = unit.pos;
-        if( noise[pos.x()][pos.y()] < 0.5f + 0.2f * (float)rand() / (float)RAND_MAX){
-            container.get(pos).objects.emplace_back(
-            make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
-        }
-    }
-
-    for(auto& unit : container){
-        auto pos = unit.pos;
         if( noise[pos.x()][pos.y()] < 0.5f + 0.1f * (float)rand() / (float)RAND_MAX){
             container.get(pos).objects.emplace_back(
                     make_shared<Environment>(Environment(Environment::Type::Rock, pos)));
         }
     }
+
+    for(auto& unit : container){
+        auto pos = unit.pos;
+        if( noise[pos.x()][pos.y()] < 0.5f + 0.2f * (float)rand() / (float)RAND_MAX){
+            if(container.get(pos).objects.empty())
+                container.get(pos).objects.emplace_back(
+                make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
+        }
+    }
+
+
 
 //    // Generate 30 rocks
 //    for (int i = 0; i < 20; ++i) {
@@ -149,6 +152,19 @@ void GameController::update() {
                 temp->position.y() < 0 ||
                 !container.get(temp->position).objects.empty()) {
                 temp->position = previous_positions[i];
+            }
+
+            //Check for collision with other dwarves (optional)
+            for (int j = 0; j < container.objects.size(); ++j) {
+                // Not check collision with himself
+                if( j == i ) continue;
+                if(item->getObjectType() != "dwarf") continue;
+
+                auto dwarf = static_pointer_cast<Dwarf>(container.objects[j]);
+                if(dwarf->position.x() == temp->position.x() && dwarf->position.y() == temp->position.y()) {
+                    temp->position = previous_positions[i];
+                    break;
+                }
             }
         }
     }
