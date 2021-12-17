@@ -31,7 +31,6 @@ class GameView {
 
     float scale = 1;
 public:
-
     /**
      * Size of cells in pixels
      */
@@ -54,7 +53,9 @@ public:
     Vector2i fromWindow2Model( float x, float y ) const;
     Vector2f fromModel2Window( int x, int y ) const;
 
-    void scale(float scale);
+    void setScale(float _scale);
+    float getScale() const;
+    Vector2f getSize();
 
 private:
     void drawEnvironment(std::shared_ptr<Environment> environment);

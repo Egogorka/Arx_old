@@ -45,7 +45,7 @@ add_executable(Arx
 #        src/controllers/MenuController.h
 #        utility/Eventer.h
         utility/PerlinNoise.cpp
-        utility/PerlinNoise.h src/controllers/MenuController.cpp src/controllers/MenuController.h)
+        utility/PerlinNoise.h src/controllers/MenuController.cpp src/controllers/MenuController.h utility/Vector.cpp)
 
 include_directories(utility, ../Arx)
 

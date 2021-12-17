@@ -12,8 +12,6 @@ GameController::GameController(std::shared_ptr<Drawer> drawer)
 }
 
 void GameController::init() {
-    float width  = view->scale * view->size;
-    float height = width;
 
     // Generate 20 trees
     for (int i = 0; i < 20; ++i) {
@@ -42,8 +40,9 @@ void GameController::init() {
     drawer->add_event_listener(
         Drawer::Event::EventType::MousePressed,
         function{[=](const Drawer::Event& event) {
-            int mouse_x = event.mouseClick.position[0] / width;
-            int mouse_y = event.mouseClick.position[1] / height;
+            auto temp = this->view->fromWindow2Model(Vector2f{(float)event.mouseClick.position.x(), (float)event.mouseClick.position.y()});
+            int mouse_x = temp.x();
+            int mouse_y = temp.y();
             Vector2f pos_f{(float)event.mouseClick.position.x(), (float)event.mouseClick.position.y()};
             Vector3i pos{0,mouse_x,mouse_y};
 
@@ -71,6 +70,24 @@ void GameController::init() {
                     container.get(pos).objects.emplace_back(std::make_shared<Storehouse>(pos));
             }
         }}
+    );
+
+    drawer->add_event_listener(
+    Drawer::Event::EventType::MouseScroll,
+    function{[this](const Drawer::Event& event){
+            auto scale = this->view->getScale();
+            this->view->setScale(scale + event.mouseScroll.delta/10);
+        }}
+    );
+
+    drawer->add_event_listener(
+            Drawer::Event::EventType::MousePressed,
+            function{[this](const Drawer::Event& event){
+                if(event.mouseClick.button == DrawerEvent::MouseClick::MouseButton::Middle){
+                    auto temp = get_vector_i2f(event.mouseClick.position) - this->drawer->getSize()/2;
+                    this->view->offset -= temp;
+                }
+            }}
     );
 }
 

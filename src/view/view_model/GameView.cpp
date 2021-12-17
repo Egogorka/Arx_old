@@ -119,6 +119,22 @@ Vector2f GameView::fromModel2Window(int x, int y) const {
     return fromModel2Window(Vector2i{x,y});
 }
 
+float GameView::getScale() const {
+    return scale;
+}
+
+void GameView::setScale(float _scale) {
+    auto old_size = getSize();
+    scale = _scale;
+
+    offset += (old_size - getSize())/2;
+}
+
+Vector2f GameView::getSize() {
+    auto temp = container.getSize().getXY();
+    return scale * size * Vector2f{(float)temp.x(), (float)temp.y()};
+}
+
 #include <cmath>
 
 Vector2i GameView::fromWindow2Model(const Vector2f &pos) const {
