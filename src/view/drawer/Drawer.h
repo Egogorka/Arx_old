@@ -40,6 +40,8 @@ public:
 
     void draw_line(const Vector2i &a, const Vector2i &b, const Color &color) override;
 
+    Vector2f getSize();
+
     friend class GameView;
 };
 

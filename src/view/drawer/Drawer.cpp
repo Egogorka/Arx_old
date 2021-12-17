@@ -82,6 +82,10 @@ std::queue<DrawerEvent> Drawer::handle_events() {
     return events;
 }
 
+Vector2f Drawer::getSize() {
+    return Vector2f{(float)window.getSize().x, (float)window.getSize().y};
+}
+
 sf::Vector2f Drawer::get_sf_vector(const Vector2i &vec) {
     return { (float)vec.x(), (float)vec.y() };
 }
