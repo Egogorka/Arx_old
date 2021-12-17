@@ -4,8 +4,6 @@
 
 #include "utility/PerlinNoise.h"
 
-#include <SFML/Graphics.hpp>
-
 int main() {
     App app{};
 
