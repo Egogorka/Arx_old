@@ -86,6 +86,7 @@ void GameController::init() {
                 if(event.mouseClick.button == DrawerEvent::MouseClick::MouseButton::Middle){
                     auto temp = get_vector_i2f(event.mouseClick.position) - this->drawer->getSize()/2;
                     this->view->offset -= temp;
+                    this->view->setOrigin(get_vector_i2f(event.mouseClick.position));
                 }
             }}
     );
