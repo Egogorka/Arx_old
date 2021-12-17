@@ -30,8 +30,10 @@ class GameView {
     const Container& container;
 
     float scale = 1;
-public:
 
+    // Center of scaling - does not scale itself
+    Vector2f origin{0,0};
+public:
     /**
      * Size of cells in pixels
      */
@@ -54,7 +56,11 @@ public:
     Vector2i fromWindow2Model( float x, float y ) const;
     Vector2f fromModel2Window( int x, int y ) const;
 
-    void scale(float scale);
+    void setScale(float _scale);
+    float getScale() const;
+    Vector2f getSize();
+
+    void setOrigin(Vector2f _origin);
 
 private:
     void drawEnvironment(std::shared_ptr<Environment> environment);

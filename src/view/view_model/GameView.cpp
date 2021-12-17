@@ -15,6 +15,8 @@ GameView::GameView(std::shared_ptr<Drawer> drawer, const Container& container) :
     auto centerWindow = Vector2f{(float)drawer->window.getSize().x, (float)drawer->window.getSize().y}/2;
     auto centerGame = fromModel2Window(container.getSize().getXY())/2;
 
+    origin = centerGame;
+
     offset = centerWindow - centerGame;
 }
 
@@ -119,6 +121,22 @@ Vector2f GameView::fromModel2Window(int x, int y) const {
     return fromModel2Window(Vector2i{x,y});
 }
 
+float GameView::getScale() const {
+    return scale;
+}
+
+void GameView::setScale(float _scale) {
+    auto old_scale = scale;
+    scale = _scale;
+
+    offset += origin*(old_scale - scale);
+}
+
+Vector2f GameView::getSize() {
+    auto temp = container.getSize().getXY();
+    return scale * size * Vector2f{(float)temp.x(), (float)temp.y()};
+}
+
 #include <cmath>
 
 Vector2i GameView::fromWindow2Model(const Vector2f &pos) const {
@@ -129,4 +147,9 @@ Vector2i GameView::fromWindow2Model(const Vector2f &pos) const {
 Vector2f GameView::fromModel2Window(const Vector2i &pos) const {
     return scale * size * Vector2f{(float)pos.x(),(float)pos.y()} + offset;
 }
+
+void GameView::setOrigin(Vector2f _origin) {
+    origin = (_origin - offset)/scale;
+}
+
 
