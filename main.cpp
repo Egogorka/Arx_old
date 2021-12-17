@@ -2,8 +2,16 @@
 
 #include "src/controllers/App.h"
 
-int main() {
-    App app{};
+#include "utility/PerlinNoise.h"
 
-    app.loop();
+int main() {
+//    App app{};
+//
+//    app.loop();
+
+    vector<float> seed(256);
+    for (auto& elem : seed){
+        elem = std::rand();
+    }
+
 }

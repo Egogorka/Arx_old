@@ -20,7 +20,7 @@ add_executable(Arx
         src/controllers/App.cpp src/controllers/App.h
         src/view/drawer/Drawer.cpp src/view/drawer/Drawer.h
         utility/Vector.h
-        interfaces/view/DrawerInterface.h src/view/drawer/DrawerEvents.cpp src/view/drawer/DrawerEvents.h src/model/Cell.cpp src/model/Cell.h src/model/Dwarf.cpp src/model/Dwarf.h src/view/Color.cpp src/view/Color.h src/model/Container.cpp src/model/Container.h src/model/Object.cpp src/model/Object.h src/model/structures/Resource.cpp src/model/structures/Resource.h src/model/structures/Environment.cpp src/model/structures/Environment.h src/model/structures/Storehouse.cpp src/model/structures/Storehouse.h src/controllers/GameController.cpp src/controllers/GameController.h src/view/view_model/GameView.cpp src/view/view_model/GameView.h src/model/structures/all.h)
+        interfaces/view/DrawerInterface.h src/view/drawer/DrawerEvents.cpp src/view/drawer/DrawerEvents.h src/model/Cell.cpp src/model/Cell.h src/model/Dwarf.cpp src/model/Dwarf.h src/view/Color.cpp src/view/Color.h src/model/Container.cpp src/model/Container.h src/model/Object.cpp src/model/Object.h src/model/structures/Resource.cpp src/model/structures/Resource.h src/model/structures/Environment.cpp src/model/structures/Environment.h src/model/structures/Storehouse.cpp src/model/structures/Storehouse.h src/controllers/GameController.cpp src/controllers/GameController.h src/view/view_model/GameView.cpp src/view/view_model/GameView.h src/model/structures/all.h src/controllers/MenuController.cpp src/controllers/MenuController.h utility/Eventer.h utility/PerlinNoise.cpp utility/PerlinNoise.h)
 
 include_directories(utility, ../Arx)
 
