@@ -144,12 +144,15 @@ public:
     }
 };
 
-
-
-
 typedef Vector<float,2> Vector2f;
 typedef Vector<float,3> Vector3f;
 typedef Vector<int,2> Vector2i;
 typedef Vector<int,3> Vector3i;
+
+Vector2f get_vector_i2f(Vector2i vec);
+Vector3f get_vector_i2f(Vector3i vec);
+
+Vector2i get_vector_f2i(Vector2f vec);
+Vector3i get_vector_f2i(Vector3i vec);
 
 #endif //DEFANTCE_VECTOR_H

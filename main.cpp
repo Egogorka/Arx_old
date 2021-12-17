@@ -6,14 +6,7 @@
 #include "utility/PerlinNoise.h"
 
 int main() {
-    //App app{};
+    App app{};
 
-    //app.loop();
-
-
-//    vector<float> seed(256);
-//    for (auto& elem : seed){
-//        elem = std::rand();
-//    }
-
+    app.loop();
 }

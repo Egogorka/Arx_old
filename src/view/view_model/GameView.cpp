@@ -10,6 +10,14 @@ GameView::GameView(std::shared_ptr<Drawer> drawer, const Container& container) :
     tex_store.loadFromFile("../assets/Store.png");
     tex_cell.loadFromFile("../assets/Grass.png");
     tex_dwarf.loadFromFile("../assets/Dwarf.png");
+
+    // Set initial offset (centring)
+    auto centerWindow = Vector2f{(float)drawer->window.getSize().x, (float)drawer->window.getSize().y}/2;
+    auto centerGame = fromModel2Window(container.getSize().getXY())/2;
+
+    origin = centerGame;
+
+    offset = centerWindow - centerGame;
 }
 
 
@@ -32,7 +40,7 @@ void GameView::drawCell(const Cell &cell) {
     sf::Sprite sprite;
     sprite.setTexture(tex_cell);
 
-    auto temp = getPoint(cell.position.getXY());
+    auto temp = fromModel2Window(cell.position.getXY());
     auto box = sprite.getLocalBounds();
 
 //    sprite.setOrigin(box.width/2, box.height/2);
@@ -54,7 +62,7 @@ void GameView::drawEnvironment(std::shared_ptr<Environment> environment) {
         sprite.setScale(scale * 0.1, scale * 0.1);
     }
 
-    auto temp = getPoint(environment->position.getXY());
+    auto temp = fromModel2Window(environment->position.getXY());
     auto box = sprite.getLocalBounds();
 
 //    sprite.setOrigin(box.width/2, box.height/2);
@@ -68,7 +76,7 @@ void GameView::drawStorehouse(std::shared_ptr<Storehouse> storehouse) {
     sf::Sprite sprite;
     sprite.setTexture(tex_store);
 
-    auto temp = getPoint(storehouse->position.getXY());
+    auto temp = fromModel2Window(storehouse->position.getXY());
     auto box = sprite.getLocalBounds();
 
 //    sprite.setOrigin(box.width/2, box.height/2);
@@ -83,7 +91,7 @@ void GameView::drawDwarf(std::shared_ptr<Dwarf> dwarf) {
     sprite.setTexture(tex_dwarf);
     sprite.setTextureRect(sf::IntRect{5,10,30-5,30-10});
 
-    auto temp = getPoint(dwarf->position.getXY());
+    auto temp = fromModel2Window(dwarf->position.getXY());
     auto box = sprite.getLocalBounds();
 
 //    sprite.setOrigin(box.width/2, box.height/2);
@@ -105,10 +113,43 @@ void GameView::render() {
         drawObject(obj);
 }
 
-Vector2f GameView::getPoint(const Vector2f &vec) {
-    return scale * size * vec;
+Vector2i GameView::fromWindow2Model(float x, float y) const {
+    return fromWindow2Model(Vector2f{x,y});
 }
 
-Vector2f GameView::getPoint(const Vector2i &vec) {
-    return getPoint(Vector2f{(float)vec.x(), (float)vec.y()});
+Vector2f GameView::fromModel2Window(int x, int y) const {
+    return fromModel2Window(Vector2i{x,y});
 }
+
+float GameView::getScale() const {
+    return scale;
+}
+
+void GameView::setScale(float _scale) {
+    auto old_scale = scale;
+    scale = _scale;
+
+    offset += origin*(old_scale - scale);
+}
+
+Vector2f GameView::getSize() {
+    auto temp = container.getSize().getXY();
+    return scale * size * Vector2f{(float)temp.x(), (float)temp.y()};
+}
+
+#include <cmath>
+
+Vector2i GameView::fromWindow2Model(const Vector2f &pos) const {
+    auto temp = (pos - offset)/scale/size;
+    return Vector2i{(int)floor(temp.x()), (int)floor(temp.y())};
+}
+
+Vector2f GameView::fromModel2Window(const Vector2i &pos) const {
+    return scale * size * Vector2f{(float)pos.x(),(float)pos.y()} + offset;
+}
+
+void GameView::setOrigin(Vector2f _origin) {
+    origin = (_origin - offset)/scale;
+}
+
+
