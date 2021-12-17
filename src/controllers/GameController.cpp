@@ -66,8 +66,14 @@ void GameController::init() {
 
             // Building Storehouses
             if (event.mouseClick.button == DrawerEvent::MouseClick::MouseButton::Right) {
-                if(this->wood_resource.amount > 5)
-                    container.get(pos).objects.emplace_back(std::make_shared<Storehouse>(pos));
+//                if(this->wood_resource.amount > 5)
+//                    container.get(pos).objects.emplace_back(std::make_shared<Storehouse>(pos));
+                for(auto& item : container.objects) {
+                    if(item->getObjectType() == "dwarf"){
+                        auto dwarf = dynamic_pointer_cast<Dwarf>(item);
+                        dwarf->go_to(Vector3i{0,mouse_x,mouse_y}, container);
+                    }
+                }
             }
         }}
     );

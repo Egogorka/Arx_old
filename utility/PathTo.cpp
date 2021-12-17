@@ -36,11 +36,53 @@ void Recursion (Vector2i in, int before, vector<vector<int>>& arr)
                 Recursion(in + dvector, temp, arr);
         }
 }
+#include <queue>
+
+template <typename T>
+T& get_at(Vector2i start, vector<vector<T>>& array){
+    return array[start.x()][start.y()];
+}
+
+void search_width (Vector2i start, vector<vector<int>>& array /*vector<vector<Vector2i>>& parents*/){
+
+    int m = array[0].size();
+    int n = array.size();
+    std::queue<Vector2i> check;
+
+    check.push(start);
+    get_at(start,array) = 1;
+
+    while (!check.empty()){
+        auto current = check.front();
+        check.pop();
+
+        for (int i = -1; i <= 1; ++i) {
+            for (int j = -1; j <= 1; ++j) {
+                if(i == 0 && j == 0) continue;
+                auto next = current + Vector2i{i,j};
+
+                //Check borders
+                if(next.x() < 0 || next.y() < 0 ||
+                   next.x() >= n || next.y() >= m) continue;
+
+                // Skip obstacles
+                if(get_at(next, array) == -2) continue;
+
+                // Skip ones that have less length of path
+                if (get_at(next, array) != -1 ) continue;
+
+                get_at(next, array) = get_at(current, array) + 1;
+                check.push(next);
+//                get_at(next, parents) = current;
+            }
+        }
+    }
+}
 
 list <Vector2i> PathTo (Vector2i start, Vector2i end, vector<vector<int>>& array )
 {
     array[start.x()][ start.y()] = 1;
-    Recursion(start, 0, array);
+    search_width(start, array);
     int m = array[0].size();
     int n = array.size();
 
@@ -73,7 +115,7 @@ list <Vector2i> PathTo (Vector2i start, Vector2i end, vector<vector<int>>& array
         }
         current = nextposition;
         path.push_back(current);
-        cout << current << endl;
+//        cout << current << endl;
 
     }
 
@@ -113,5 +155,5 @@ int Test()
     }
 
 
-
+    return 0;
 };
