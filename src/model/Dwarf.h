@@ -28,6 +28,7 @@ private:
     int age;
 
     list<Vector2i> path;
+    bool _hasTask;
 public:
     Vector3i position;
 
@@ -43,6 +44,10 @@ public:
     void update() override;
 
     void go_to(const Vector3i &position, const Container& container);
+    void break_at(const Vector3i &position, const Container& container);
+    bool hasTask();
+    // splint
+    void setTask(bool task);
 };
 
 

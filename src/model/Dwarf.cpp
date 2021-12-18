@@ -20,7 +20,7 @@ std::string Dwarf::getObjectType() {
 
 void Dwarf::update() {
     int d100 = rand() % 100;
-    if (d100 < 90) return;
+    if (d100 < 80) return;
 
     if(path.empty()) {
         Vector3i rand_vector{0, rand() % 3 - 1, rand() % 3 - 1};
@@ -49,10 +49,20 @@ void Dwarf::go_to(const Vector3i &vec, const Container& container) {
         }
     }
 
-    cout << map.size() << endl;
-    cout << map[0].size() << endl;
-
     path = PathTo(position.getXY(), vec.getXY(), map);
+}
+
+void Dwarf::break_at(const Vector3i &vec, const Container &container) {
+    go_to(vec, container);
+    _hasTask = true;
+}
+
+bool Dwarf::hasTask() {
+    return _hasTask;
+}
+
+void Dwarf::setTask(bool task) {
+    _hasTask = task;
 }
 
 //const Vector3i &Dwarf::getPosition() const { return position; }

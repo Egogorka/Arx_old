@@ -9,7 +9,7 @@
 #include "utility/PerlinNoise.h"
 
 GameController::GameController(std::shared_ptr<Drawer> drawer)
-: drawer(drawer), container(1, 60, 60) {
+: drawer(drawer), container(1, 70, 70) {
     view = std::make_shared<GameView>(drawer, container);
 }
 
@@ -22,47 +22,27 @@ void GameController::init() {
             elem1 = (float)rand() / (float)RAND_MAX;
         }
     }
-    auto noise = PerlinNoise2D(seed2D, 5, 1.0f);
+    auto noise = PerlinNoise2D(seed2D, 5, 0.8f);
 
 
-
-    // Generate 20 trees
-//    for (int i = 0; i < 20; ++i) {
-//        int x = std::rand() % size_x;
-//        int y = std::rand() % size_y;
-//        Vector3i pos{0,x,y};
-//        if(container.get(pos).objects.empty())
-//            container.get(pos).objects.emplace_back(
-//            make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
-//    }
+    // Generate rocks
     for(auto& unit : container){
         auto pos = unit.pos;
-        if( noise[pos.x()][pos.y()] < 0.5f + 0.1f * (float)rand() / (float)RAND_MAX){
+        if( noise[pos.x()][pos.y()] < 0.4f + 0.1f * (float)rand() / (float)RAND_MAX){
             container.get(pos).objects.emplace_back(
                     make_shared<Environment>(Environment(Environment::Type::Rock, pos)));
         }
     }
 
+    // Generate trees
     for(auto& unit : container){
         auto pos = unit.pos;
-        if( noise[pos.x()][pos.y()] < 0.5f + 0.2f * (float)rand() / (float)RAND_MAX){
+        if( noise[pos.x()][pos.y()] < 0.4f + 0.15f * (float)rand() / (float)RAND_MAX){
             if(container.get(pos).objects.empty())
                 container.get(pos).objects.emplace_back(
                 make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
         }
     }
-
-
-
-//    // Generate 30 rocks
-//    for (int i = 0; i < 20; ++i) {
-//        int x = std::rand() % size_x;
-//        int y = std::rand() % size_y;
-//        Vector3i pos{0,x,y};
-//        if(container.get(pos).objects.empty())
-//            container.get(pos).objects.emplace_back(
-//            make_shared<Environment>(Environment::Type::Rock, pos));
-//    }
 
     for (int i = 0; i < 10; ++i) {
         container.objects.push_back(make_shared<Dwarf>(Vector3i{size_z / 2, size_x / 2, size_y / 2}));
@@ -79,19 +59,14 @@ void GameController::init() {
 
             // Harvesting of resources
             if (event.mouseClick.button == DrawerEvent::MouseClick::MouseButton::Left) {
-                if (auto ptr = std::dynamic_pointer_cast<Environment>(container.get(pos).objects.front())) {
-                    switch (ptr->type) {
-                        case Environment::Type::Rock:
-                            this->stone_resource.amount += 1;
+                for(auto& item : container.objects) {
+                    if(item->getObjectType() == "dwarf"){
+                        auto dwarf = dynamic_pointer_cast<Dwarf>(item);
+                        if(!dwarf->hasTask()) {
+                            dwarf->break_at(Vector3i{0, mouse_x, mouse_y}, container);
                             break;
-                        case Environment::Type::Tree:
-                            this->wood_resource.amount += 1;
-                            break;
-                        default:
-                            break;
+                        }
                     }
-                    // Delete the environment at point;
-                    container.get(pos).objects.pop_front();
                 }
             } else
 
@@ -122,8 +97,8 @@ void GameController::init() {
             function{[this](const Drawer::Event& event){
                 if(event.mouseClick.button == DrawerEvent::MouseClick::MouseButton::Middle){
                     auto temp = get_vector_i2f(event.mouseClick.position) - this->drawer->getSize()/2;
-                    this->view->offset -= temp;
                     this->view->setOrigin(get_vector_i2f(event.mouseClick.position));
+                    this->view->offset -= temp;
                 }
             }}
     );
@@ -142,27 +117,39 @@ void GameController::update() {
     for (int i = 0; i < container.objects.size(); ++i) {
         auto& item = container.objects[i];
         if(item->getObjectType() == "dwarf"){
-
+            auto dwarf = static_pointer_cast<Dwarf>(item);
             item->update();
 
-            auto temp = static_pointer_cast<Dwarf>(item);
-            if( temp->position.x() >= size_x ||
-                temp->position.y() >= size_y ||
-                temp->position.x() < 0 ||
-                temp->position.y() < 0 ||
-                !container.get(temp->position).objects.empty()) {
-                temp->position = previous_positions[i];
+            // Check for boundaries
+            if(dwarf->position.x() >= size_x ||
+               dwarf->position.y() >= size_y ||
+               dwarf->position.x() < 0 ||
+               dwarf->position.y() < 0 )
+            {
+                dwarf->position = previous_positions[i];
+                continue;
+            }
+
+            // Dwarf break
+            if(!container.get(dwarf->position).objects.empty() && dwarf->hasTask()) {
+                container.get(dwarf->position).objects.pop_front();
+                dwarf->setTask(false);
+            }
+
+            // Dwarf cannot step on rock
+            if(!container.get(dwarf->position).objects.empty()) {
+                dwarf->position = previous_positions[i];
             }
 
             //Check for collision with other dwarves (optional)
             for (int j = 0; j < container.objects.size(); ++j) {
                 // Not check collision with himself
                 if( j == i ) continue;
-                if(item->getObjectType() != "dwarf") continue;
+                if(item->getObjectType() != "dwarf_temp") continue;
 
-                auto dwarf = static_pointer_cast<Dwarf>(container.objects[j]);
-                if(dwarf->position.x() == temp->position.x() && dwarf->position.y() == temp->position.y()) {
-                    temp->position = previous_positions[i];
+                auto dwarf_temp = static_pointer_cast<Dwarf>(container.objects[j]);
+                if(dwarf_temp->position.x() == dwarf->position.x() && dwarf_temp->position.y() == dwarf->position.y()) {
+                    dwarf->position = previous_positions[i];
                     break;
                 }
             }

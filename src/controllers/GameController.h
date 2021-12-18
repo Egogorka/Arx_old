@@ -27,8 +27,8 @@ class GameController {
     Container container;
 
     int size_z = 1;
-    int size_x = 60;
-    int size_y = 60;
+    int size_x = 70;
+    int size_y = 70;
 
     Resource stone_resource{Resource::Type::Stone};
     Resource wood_resource{Resource::Type::Wood};

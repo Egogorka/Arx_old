@@ -168,7 +168,7 @@ int testNoise() {
             for (int i = 0; i < noise.size(); ++i) {
                 for (int j = 0; j < noise[0].size(); ++j) {
                     sf::RectangleShape rec;
-                    std::cout << noise[i][j] << '\n';
+//                    std::cout << noise[i][j] << '\n';
                     unsigned char temp = (unsigned char)(512 * noise[i][j]) % 255;
                     rec.setFillColor(sf::Color{temp, temp, temp});
                     rec.setSize(sf::Vector2f(2, 2));
