@@ -8,6 +8,6 @@ std::string Object::getObjectType() {
     return "object";
 }
 
-void Object::update() {
-    return;
-}
+void Object::update() {}
+
+Object::Object(const Vector3i &position) : position(position) {}

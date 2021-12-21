@@ -4,9 +4,12 @@
 
 #include "Environment.h"
 
-Environment::Environment(): Environment(Type::Rock, Vector3i{0,0,0}) {}
+Environment::Environment(Environment::Type type, const Vector3i &position):
+    Object(position),
+    type(type) {}
 
-Environment::Environment(Environment::Type type, const Vector3i &position) : position(position), type(type) {}
+Environment::Environment():
+    Environment(Type::Rock, Vector3i{0,0,0}) {}
 
 std::string Environment::getObjectType() {
     return "environment";

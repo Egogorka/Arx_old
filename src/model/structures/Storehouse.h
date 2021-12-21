@@ -13,7 +13,6 @@
 struct Storehouse : public Object {
     Resource resource;
     int health;
-    Vector3i position;
 
     Storehouse();
     explicit Storehouse(const Vector3i& position);

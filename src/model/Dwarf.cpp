@@ -4,15 +4,18 @@
 
 #include "Dwarf.h"
 
-Dwarf::Dwarf(const Vector3i &position) :
-position(position), health(1000), hunger(1000), age(20), path() {}
-
 Dwarf::Dwarf(const Vector3i &position, int health, int hunger, int age) :
-position(position), health(health), hunger(hunger), age(age), path() {}
+    Object(position),
+    health(health), hunger(hunger), age(age), path() {}
 
-Dwarf::Dwarf(Vector3i && position): Dwarf(position) {}
+Dwarf::Dwarf(const Vector3i &position) :
+    Dwarf(position, 1000, 1000, 20) {}
 
-Dwarf::Dwarf(): Dwarf(Vector3i{0,0,0}) {}
+Dwarf::Dwarf(Vector3i && position):
+    Dwarf(position) {}
+
+Dwarf::Dwarf():
+    Dwarf(Vector3i{0,0,0}) {}
 
 std::string Dwarf::getObjectType() {
     return "dwarf";
