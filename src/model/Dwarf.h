@@ -30,8 +30,6 @@ private:
     list<Vector2i> path;
     bool _hasTask;
 public:
-    Vector3i position;
-
     std::string getObjectType() override;
 
     Dwarf();

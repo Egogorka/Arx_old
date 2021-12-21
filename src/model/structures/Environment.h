@@ -11,7 +11,6 @@
 struct Environment : public Object {
     enum class Type { Tree, Rock };
 
-    Vector3i position;
     Type type;
 
     Environment();

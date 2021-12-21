@@ -22,18 +22,23 @@
 
 // for object_types
 #include <string>
+#include "utility/Vector.h"
 
 class Object {
 public:
     /**
-     * Function to get the
+     * Position of Object in container/map.
+     */
+    Vector3i position;
+
+    explicit Object(const Vector3i &position);
+
+    /**
+     * Function to get the object type
      * @return
      */
     virtual std::string getObjectType();
-    /**
-     * Identification number
-     */
-//    long id;
+
 
     virtual void update();
 };
