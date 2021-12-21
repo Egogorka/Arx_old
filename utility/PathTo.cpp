@@ -148,7 +148,7 @@ list <Vector2i> PathTo (Vector2i start, Vector2i end, vector<vector<int>>& array
     Vector2i nextposition = current;
     path.push_back(end);
     int minemum = 10000;
-    while (current.x() != start.x() and current.y() != start.y())
+    while (current.x() != start.x() || current.y() != start.y())
     {
         minemum = 10000;
         for (int i = -1; i <= 1; i++)
@@ -156,7 +156,6 @@ list <Vector2i> PathTo (Vector2i start, Vector2i end, vector<vector<int>>& array
             for (int j = -1; j <= 1; j++)
             {
                 if (i == 0 && j == 0) continue;
-
                 Vector2i newposition = current + Vector2i {i,j};
 
                 if (newposition.x() < 0 || newposition.y() < 0 || newposition.x() >= n || newposition.y() >= m) continue;
