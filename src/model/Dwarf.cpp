@@ -47,6 +47,8 @@ void Dwarf::go_to(const Vector3i &vec, const Container& container) {
     }
 
     for(auto& unit : container){
+        if(unit.pos.z() != 0) continue;
+
         if(!unit.objects.empty()){
             map[unit.pos.x()][unit.pos.y()] = -2;
         }

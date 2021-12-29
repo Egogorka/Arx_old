@@ -9,7 +9,7 @@
 #include "utility/PerlinNoise.h"
 
 GameController::GameController(std::shared_ptr<Drawer> drawer)
-: drawer(drawer), container(1, 70, 70) {
+: drawer(drawer), container(size_z, size_x, size_y) {
     view = std::make_shared<GameView>(drawer, container);
 }
 
@@ -22,30 +22,56 @@ void GameController::init() {
             elem1 = (float)rand() / (float)RAND_MAX;
         }
     }
-    auto noise = PerlinNoise2D(seed2D, 5, 0.8f);
+    auto noise = PerlinNoise2D(seed2D, 10, 1.3f);
 
-
-    // Generate rocks
     for(auto& unit : container){
         auto pos = unit.pos;
-        if( noise[pos.x()][pos.y()] < 0.4f + 0.1f * (float)rand() / (float)RAND_MAX){
-            container.get(pos).objects.emplace_back(
-                    make_shared<Environment>(Environment(Environment::Type::Rock, pos)));
+        if(unit.pos.z() == 0) {
+
+            if( noise[pos.x()][pos.y()] < 0.4f + 0.05f * (float)rand() / (float)RAND_MAX ){
+                unit.cell.wall_type = Cell::MaterialType::Stone;
+                unit.cell.floor_type = Cell::MaterialType::Stone;
+
+                container.get(pos + Vector3i{1,0,0}).cell.floor_type = Cell::MaterialType::Grass;
+                continue;
+            } else {
+                unit.cell.floor_type = Cell::MaterialType::Grass;
+            }
+
+        } else {
+            auto temp = 1.0f - float(pos.z()) / size_z;
+            if(noise[pos.x()][pos.y()] < 0.4f * temp){
+                unit.cell.wall_type = Cell::MaterialType::Stone;
+                unit.cell.floor_type = Cell::MaterialType::Stone;
+
+                if(unit.pos.z() < size_z - 1)
+                    container.get(pos + Vector3i{1,0,0}).cell.floor_type = Cell::MaterialType::Grass;
+            }
         }
     }
 
-    // Generate trees
     for(auto& unit : container){
+        if(unit.cell.wall_type != Cell::MaterialType::None) continue;
+        if(unit.cell.floor_type == Cell::MaterialType::None) continue;
+
         auto pos = unit.pos;
-        if( noise[pos.x()][pos.y()] < 0.4f + 0.15f * (float)rand() / (float)RAND_MAX){
-            if(container.get(pos).objects.empty())
-                container.get(pos).objects.emplace_back(
-                make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
+
+        // Generate rocks
+        if( (float)rand() / (float)RAND_MAX < 0.05f ){
+            unit.objects.emplace_back(
+                    make_shared<Environment>(Environment(Environment::Type::Rock, pos)));
+            continue;
+        }
+
+        // Generate trees
+        if( (float)rand() / (float)RAND_MAX < 0.1f ){
+            unit.objects.emplace_back(
+                    make_shared<Environment>(Environment(Environment::Type::Tree, pos)));
         }
     }
 
     for (int i = 0; i < 10; ++i) {
-        container.objects.push_back(make_shared<Dwarf>(Vector3i{size_z / 2, size_x / 2, size_y / 2}));
+        container.objects.push_back(make_shared<Dwarf>(Vector3i{0, size_x / 2, size_y / 2}));
     }
 
     drawer->add_event_listener(
@@ -99,6 +125,19 @@ void GameController::init() {
                     auto temp = get_vector_i2f(event.mouseClick.position) - this->drawer->getSize()/2;
                     this->view->setOrigin(get_vector_i2f(event.mouseClick.position));
                     this->view->offset -= temp;
+                }
+            }}
+    );
+
+    drawer->add_event_listener(
+            Drawer::Event::EventType::KeyPressed,
+            function{[this](const Drawer::Event& event){
+                // Period means down
+                if(event.key.type == DrawerEvent::Key::KeyType::Period){
+                    this->view->z_level -= 1;
+                } else
+                if(event.key.type == DrawerEvent::Key::KeyType::Comma){
+                    this->view->z_level += 1;
                 }
             }}
     );

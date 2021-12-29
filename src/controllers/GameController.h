@@ -23,12 +23,12 @@ class GameController {
     shared_ptr<Drawer> drawer;
     shared_ptr<GameView> view;
 
-    // Makes itself
-    Container container;
-
-    int size_z = 1;
+    int size_z = 3;
     int size_x = 70;
     int size_y = 70;
+
+    // Makes itself
+    Container container;
 
     Resource stone_resource{Resource::Type::Stone};
     Resource wood_resource{Resource::Type::Wood};

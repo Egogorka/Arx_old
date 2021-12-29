@@ -8,7 +8,7 @@
 Cell::Cell(Cell::MaterialType floorType, Cell::MaterialType wallType, const Vector3i &position)
 : floor_type(floorType), wall_type(wallType), position(position) {}
 
-Cell::Cell(const Vector3i &position) : Cell(MaterialType::Grass, MaterialType::None, position) {}
+Cell::Cell(const Vector3i &position) : Cell(MaterialType::None, MaterialType::None, position) {}
 
 Cell::Cell() : Cell(Vector3i{0,0,0}) {}
 
