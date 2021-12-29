@@ -23,8 +23,8 @@ class GameView {
     sf::Texture tex_tree;
     sf::Texture tex_stone;
     sf::Texture tex_store;
-    sf::Texture tex_cell;
     sf::Texture tex_dwarf;
+    sf::Texture sprite_sheet;
 
     // Link to container of GameController
     const Container& container;
@@ -33,17 +33,25 @@ class GameView {
 
     // Center of scaling - does not scale itself
     Vector2f origin{0,0};
+
 public:
+
     /**
      * Size of cells in pixels
      */
-    int size = 20;
+    int size = 16;
+
+    /**
+     * Currently displayed z-level
+     */
+    int z_level = 0;
 
     /**
      * Position of a left-upper corner of the field
      */
     Vector2f offset{0,0};
 
+public:
     explicit GameView(std::shared_ptr<Drawer> drawer, const Container& container);
 
     void render();
@@ -63,6 +71,8 @@ public:
     void setOrigin(Vector2f _origin);
 
 private:
+//    sf::Sprite manufactureSprite(const Object& object);
+
     void drawEnvironment(std::shared_ptr<Environment> environment);
     void drawStorehouse(std::shared_ptr<Storehouse> storehouse);
     void drawDwarf(std::shared_ptr<Dwarf> dwarf);

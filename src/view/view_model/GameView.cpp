@@ -8,7 +8,7 @@ GameView::GameView(std::shared_ptr<Drawer> drawer, const Container& container) :
     tex_tree.loadFromFile("../assets/Tree2.png");
     tex_stone.loadFromFile("../assets/Stone.png");
     tex_store.loadFromFile("../assets/Store.png");
-    tex_cell.loadFromFile("../assets/Grass.png");
+    sprite_sheet.loadFromFile("../assets/spritesheet1.png");
     tex_dwarf.loadFromFile("../assets/Dwarf.png");
 
     // Set initial offset (centring)
@@ -20,6 +20,11 @@ GameView::GameView(std::shared_ptr<Drawer> drawer, const Container& container) :
     offset = centerWindow - centerGame;
 }
 
+//sf::Sprite GameView::manufactureSprite(const Object &object) {
+//
+//
+//
+//}
 
 void GameView::drawObject(std::shared_ptr<Object> object) {
     if(object->getObjectType() == "environment"){
@@ -38,13 +43,32 @@ void GameView::drawObject(std::shared_ptr<Object> object) {
 
 void GameView::drawCell(const Cell &cell) {
     sf::Sprite sprite;
-    sprite.setTexture(tex_cell);
+    sprite.setTexture(sprite_sheet);
+    if(cell.wall_type == Cell::MaterialType::None){
+        switch (cell.floor_type) {
+            case Cell::MaterialType::Grass:
+                sprite.setTextureRect(sf::IntRect{64, 240, 16, 16});
+                sprite.setColor(sf::Color{100, 200, 30, 255});
+                break;
+            case Cell::MaterialType::Stone:
+                sprite.setTextureRect(sf::IntRect{112, 32, 16, 16});
+                break;
+            case Cell::MaterialType::None:
+            default:
+                return;
+        }
+    } else
+    if(cell.wall_type == Cell::MaterialType::Stone){
+        sprite.setTextureRect(sf::IntRect{48, 128, 16, 16});
+        sprite.setColor(sf::Color{80, 80, 100, 255});
+    }
+
 
     auto temp = fromModel2Window(cell.position.getXY());
     auto box = sprite.getLocalBounds();
 
 //    sprite.setOrigin(box.width/2, box.height/2);
-    sprite.setScale(scale*0.9,scale*0.9);
+    sprite.setScale(scale,scale);
     sprite.setPosition(drawer->get_sf_vector(temp));
 
     drawer->window.draw(sprite);
@@ -53,14 +77,16 @@ void GameView::drawCell(const Cell &cell) {
 
 void GameView::drawEnvironment(std::shared_ptr<Environment> environment) {
     sf::Sprite sprite;
+    sprite.setTexture(sprite_sheet);
     if( environment->type == Environment::Type::Rock ) {
-        sprite.setTexture(tex_stone);
-        sprite.setScale(scale*0.2,scale*0.2);
+        sprite.setTextureRect(sf::IntRect{32,32,16,16});
+        sprite.setColor(sf::Color::Cyan);
     } else
     if( environment->type == Environment::Type::Tree ) {
-        sprite.setTexture(tex_tree);
-        sprite.setScale(scale * 0.1, scale * 0.1);
+        sprite.setTextureRect(sf::IntRect{96,0,16,16});
+        sprite.setColor(sf::Color::Green);
     }
+    sprite.setScale(scale,scale);
 
     auto temp = fromModel2Window(environment->position.getXY());
     auto box = sprite.getLocalBounds();
@@ -88,8 +114,11 @@ void GameView::drawStorehouse(std::shared_ptr<Storehouse> storehouse) {
 
 void GameView::drawDwarf(std::shared_ptr<Dwarf> dwarf) {
     sf::Sprite sprite;
-    sprite.setTexture(tex_dwarf);
-    sprite.setTextureRect(sf::IntRect{5,10,30-5,30-10});
+//    sprite.setTexture(tex_dwarf);
+//    sprite.setTextureRect(sf::IntRect{5,10,30-5,30-10});
+    sprite.setTexture(sprite_sheet);
+    sprite.setTextureRect(sf::IntRect{0,64,16,16});
+
 
     auto temp = fromModel2Window(dwarf->position.getXY());
     auto box = sprite.getLocalBounds();
@@ -102,15 +131,32 @@ void GameView::drawDwarf(std::shared_ptr<Dwarf> dwarf) {
 }
 
 void GameView::render() {
-    for(auto& unit : container)
-        drawCell(unit.cell);
+    for (int i = 0; i < container.getSize().x(); ++i) {
+        for (int j = 0; j < container.getSize().y(); ++j) {
+            if(z_level >= 0 and z_level < container.getSize().z() )
+                drawCell(container.get(z_level, i, j).cell);
+        }
+    }
 
-    for(auto& unit : container)
-        for(auto& ptr : unit.objects)
-            drawObject(ptr);
+    for (int i = 0; i < container.getSize().x(); ++i) {
+        for (int j = 0; j < container.getSize().y(); ++j) {
+            if(z_level >= 0 and z_level < container.getSize().z() )
+                for(auto& ptr : container.get(z_level, i, j).objects )
+                    drawObject(ptr);
+        }
+    }
 
-    for(auto& obj : container.objects)
-        drawObject(obj);
+//    for(auto& unit : container)
+//        drawCell(unit.cell);
+//
+//    for(auto& unit : container)
+//        for(auto& ptr : unit.objects)
+//            drawObject(ptr);
+
+    for(auto& obj : container.objects) {
+        if(obj->position.z() == z_level)
+            drawObject(obj);
+    }
 }
 
 Vector2i GameView::fromWindow2Model(float x, float y) const {
