@@ -47,33 +47,7 @@ std::queue<DrawerEvent> Drawer::handle_events() {
     std::queue<DrawerEvent> events;
     sf::Event event{};
     while (window.pollEvent(event)){
-        Event temp;
-        switch (event.type) {
-            case sf::Event::Closed:
-                temp = Event{DrawerEvent::EventType::Exit, Event::Exit{}};
-                break;
-            case sf::Event::MouseButtonPressed:
-                temp = Event{Event::EventType::MousePressed, Event::MouseClick{
-                        event.mouseButton.button,
-                        Vector2i{event.mouseButton.x, event.mouseButton.y}
-                }};
-                break;
-            case sf::Event::MouseButtonReleased:
-                temp = Event{Event::EventType::MouseReleased, Event::MouseClick{
-                        event.mouseButton.button,
-                        Vector2i{event.mouseButton.x, event.mouseButton.y}
-                }};
-                break;
-            case sf::Event::MouseMoved:
-                temp = Event{Event::EventType::MouseMove, Event::MouseMove{
-                    Vector2i{event.mouseMove.x, event.mouseMove.y}
-                }};
-                break;
-            case sf::Event::MouseWheelScrolled:
-                temp = Event{Event::EventType::MouseScroll, Event::MouseScroll{event.mouseWheelScroll}};
-            default:
-                break;
-        }
+        Event temp(event);
         if( temp.type != Event::EventType::Invalid ) {
             evoke(temp);
             events.push(temp);

@@ -33,16 +33,20 @@ DrawerEvent::MouseMove::MouseMove(const Vector2i &position)
 
 DrawerEvent::Exit::Exit() = default;
 
-DrawerEvent::DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::Exit &exit) : type(type), exit(exit) {}
+DrawerEvent::DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::Exit &exit) :
+    type(type), exit(exit) {}
 
 DrawerEvent::DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::MouseMove &mouseMove) :
-type(type), mouseMove(mouseMove) {}
+    type(type), mouseMove(mouseMove) {}
 
 DrawerEvent::DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::MouseClick &mouseClick) :
-type(type), mouseClick(mouseClick) {}
+    type(type), mouseClick(mouseClick) {}
 
 DrawerEvent::DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::MouseScroll &mouseScroll) :
-type(type), mouseScroll(mouseScroll) {}
+    type(type), mouseScroll(mouseScroll) {}
+
+DrawerEvent::DrawerEvent(DrawerEvent::EventType type, const DrawerEvent::Key &key) :
+    type(type), key(key) {}
 
 DrawerEvent::DrawerEvent(): type(EventType::Invalid) {}
 
@@ -70,3 +74,50 @@ DrawerEvent::MouseScroll::MouseScroll(float delta, const Vector2i &position): de
 DrawerEvent::MouseScroll::MouseScroll(const DrawerEvent::MouseScroll &scroll): delta(scroll.delta), position(scroll.position) {}
 
 DrawerEvent::MouseScroll::MouseScroll(const sf::Event::MouseWheelScrollEvent &scroll) : delta(scroll.delta), position(Vector2i{scroll.x, scroll.y}){}
+
+DrawerEvent::Key::Key(DrawerEvent::Key::KeyType type) : type(type) {}
+
+DrawerEvent::Key::Key(sf::Keyboard::Key key): type(KeyType::Invalid) {
+    if(key - sf::Keyboard::A)
+        type = static_cast<KeyType>(key - sf::Keyboard::A);
+}
+
+DrawerEvent::DrawerEvent(const sf::Event &event): type(EventType::Invalid) {
+    switch (event.type) {
+        case sf::Event::Closed:
+            type = EventType::Exit;
+            exit = Exit();
+            break;
+        case sf::Event::MouseButtonPressed:
+            type = EventType::MousePressed;
+            mouseClick = MouseClick(
+                    event.mouseButton.button,
+                    Vector2i{event.mouseButton.x, event.mouseButton.y}
+                    );
+            break;
+        case sf::Event::MouseButtonReleased:
+            type = EventType::MouseReleased;
+            mouseClick = MouseClick(
+                    event.mouseButton.button,
+                    Vector2i{event.mouseButton.x, event.mouseButton.y}
+            );
+            break;
+        case sf::Event::MouseMoved:
+            type = EventType::MouseMove;
+            mouseMove = MouseMove(
+                    Vector2i{event.mouseButton.x, event.mouseButton.y}
+            );
+            break;
+        case sf::Event::MouseWheelScrolled:
+            type = EventType::MouseScroll;
+            mouseScroll = MouseScroll(event.mouseWheelScroll);
+            break;
+        case sf::Event::KeyPressed:
+            type = EventType::KeyPressed;
+            key = Key(event.key.code);
+            break;
+        default:
+            type = EventType::Invalid;
+            break;
+    }
+}
