@@ -43,19 +43,6 @@ void App::loop() {
 
         gameController->update();
 
-//        // Must be moved into model or something like that
-//        for(auto& dwarf : dwarves){
-//            dwarf.position += Vector3i{rand() % 3 - 1,rand() % 3 - 1,rand() % 3 - 1};
-//        }
-//
-//        // Must be in view
-//        for(auto& dwarf : dwarves){
-//            drawer->draw_circle((float)dwarf.position[0],
-//                                10*Vector2i{dwarf.position[1], dwarf.position[2]},
-//                                Color::Green
-//                                );
-//        }
-
         drawer->display();
     };
 }

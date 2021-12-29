@@ -11,7 +11,7 @@
 
 #include "GameController.h"
 
-#define RESOLUTION_X 800
+#define RESOLUTION_X 1200
 #define RESOLUTION_Y 800
 
 #define RESOLUTION Vector2f{RESOLUTION_X, RESOLUTION_Y}
