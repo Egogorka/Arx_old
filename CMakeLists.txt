@@ -47,7 +47,8 @@ add_executable(Arx
         utility/PerlinNoise.h 
         utility/PathTo.cpp 
         utility/PathTo.h 
-        utility/Vector.cpp)
+        utility/Vector.cpp
+        utility/ndArray.h)
 
 include_directories(utility, ../Arx)
 
