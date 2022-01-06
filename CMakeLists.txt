@@ -48,7 +48,8 @@ add_executable(Arx
         utility/PathTo.cpp 
         utility/PathTo.h 
         utility/Vector.cpp
-        utility/ndArray.h)
+        utility/ndArray.h
+        utility/ndArray.cpp)
 
 include_directories(utility, ../Arx)
 

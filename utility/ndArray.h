@@ -64,6 +64,9 @@ public:
         data = new T[num_el]{};
     }
 
+    explicit ndArray(std::initializer_list<int> size)
+            : ndArray(from_initializer(size)) {}
+
     static ndArray with_size(std::initializer_list<int> size){
         return ndArray(from_initializer(size));
     }
@@ -219,5 +222,7 @@ public:
         return ConstIterator(data + num_el);
     }
 };
+
+int testNdArray();
 
 #endif //ARX_NDARRAY_H
