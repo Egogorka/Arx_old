@@ -40,6 +40,8 @@ add_executable(Arx
         utility/PathTo.h
         utility/Vector.cpp
         utility/ndArray.h
+        utility/array_functions.cpp
+        utility/array_functions.h
         )
 
 include_directories(utility, ../Arx)
@@ -85,5 +87,19 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+###########################################
+# Google test linkage
 
+enable_testing()
+
+add_executable(
+        hello_test
+        tests/utility/vector_test.cpp)
+target_link_libraries(
+        hello_test
+        gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(hello_test)
 

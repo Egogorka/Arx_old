@@ -15,6 +15,22 @@ class VectorBase: public array<T,N> {
     typedef const Derived& cvecr;
     typedef Derived& vecr;
 public:
+    static VectorBase all(T a){
+        VectorBase out;
+        for(auto& elem : out ){
+            elem = a;
+        }
+        return out;
+    }
+
+    T square(){
+        T out{};
+        for(const auto& elem : *this){
+            out += elem*elem;
+        }
+        return out;
+    }
+
     vecr operator+=(cvecr other){
         for(unsigned i=0; i<N; i++)
             this->at(i) += other[i];
@@ -154,5 +170,17 @@ Vector3f get_vector_i2f(Vector3i vec);
 
 Vector2i get_vector_f2i(Vector2f vec);
 Vector3i get_vector_f2i(Vector3i vec);
+
+template<typename T, size_t N>
+Vector<T,N> get_subvector(Vector<T,N+1> vector, int index){
+    Vector<T,N> out;
+    int i = 0;
+    for(auto& item : out){
+        if(i == index) ++i;
+        item = vector[i];
+        ++i;
+    }
+    return out;
+}
 
 #endif //DEFANTCE_VECTOR_H
