@@ -44,7 +44,8 @@ protected:
         return temp;
     }
 
-    long index(const Vector<int, N> &vector){
+public:
+    long index(const Vector<int, N> &vector) const{
         long index = 0;
         long multiplier = num_el;
         for (int i = 0; i < N; ++i) {
@@ -54,11 +55,19 @@ protected:
         return index;
     }
 
-//    Vector<int, N> from_index(long index){
-//
-//    }
+    Vector<int, N> from_index(long index) const{
+        Vector<int, N> output;
+        long multiplier = 1;
+        long previous = 0;
+        for (int i = N-1; i >= 0; --i) {
+            auto temp = index % (multiplier * size[i]);
+            output[i] = (temp - previous) / multiplier;
+            previous = temp;
+            multiplier *= size[i];
+        }
+        return output;
+    }
 
-public:
     explicit ndArray(const std::array<int, N> &size)
     : size(size), num_el(num_elements(size)), is_owner(true) {
         data = new T[num_el]{};
@@ -68,11 +77,10 @@ public:
             : ndArray(from_initializer(size)) {}
 
     static ndArray with_size(std::initializer_list<int> size){
-        return ndArray(from_initializer(size));
+        return ndArray{from_initializer(size)};
     }
 
     /**
-     *
      * @param array - must at least support the size of dimensions
      * @param dimensions
      * @return ndArray constructed with needed dimesionality and from data
@@ -90,7 +98,17 @@ public:
         return from_data(array, from_initializer(dimensions));
     }
 
-    ndArray(ndArray&& other): size(other.size), data(other.data), is_owner(true){
+    static ndArray from_data(std::initializer_list<T> array, std::initializer_list<int> dimensions){
+        T arr[array.size()];
+        auto it = array.begin();
+        for (int i = 0; i < array.size(); ++i) {
+            arr[i] = *it;
+            it++;
+        }
+        return from_data(arr, from_initializer(dimensions));
+    }
+
+    ndArray(ndArray&& other): size(other.size), data(other.data), num_el(other.num_el), is_owner(true){
         other.is_owner = false;
         other.data = nullptr;
     }
@@ -100,11 +118,12 @@ public:
         std::swap(temp.is_owner, is_owner);
         std::swap(temp.data, data);
         std::swap(temp.size, size);
+        std::swap(temp.num_el, num_el);
         return *this;
     }
 
     // deep-copy
-    ndArray(const ndArray &other) : size(other.size), data(new T[other.num_el]), is_owner(true) {
+    ndArray(const ndArray &other) : size(other.size), data(new T[other.num_el]), num_el(other.num_el), is_owner(true) {
         for (int i = 0; i < other.num_el; ++i) {
             data[i] = other.data[i];
         }
@@ -115,10 +134,25 @@ public:
         *this = std::move(temp);
     }
 
-    T &operator()(const Vector<int, N> &vector) {
+    T& operator()(const Vector<int, N> &vector) {
         return data[index(vector)];
     }
 
+    T& operator[](const Vector<int, N> &vector) {
+        return data[index(vector)];
+    }
+
+    const T& operator[](const Vector<int, N> &vector) const {
+        return data[index(vector)];
+    }
+
+    T at_def(const Vector<int, N> &vector, T def) const{
+        for (int i = 0; i < N; ++i) {
+            if(vector[i] < 0 || vector[i] >= size[i])
+                return def;
+        }
+        return (*this)[vector];
+    }
 
     ndArray<T,N-1> get_section(int index_section){
         // get_section the index
@@ -139,6 +173,10 @@ public:
         return ndArray<T,N-1>::from_data(data+j,subsize);
     }
 
+    std::array<int, N> get_size(){
+        return size;
+    }
+
     ~ndArray() {
         if (is_owner)
             delete[] data;
@@ -146,13 +184,14 @@ public:
 
     class Iterator {
         T *index;
+        ndArray *array;
     public:
         using iterator_category = std::forward_iterator_tag;
         using value_type = T;
         using pointer = T *;
         using reference = T &;
 
-        Iterator(T *index) : index(index) {};
+        Iterator(T *index, ndArray *array) : index(index), array(array) {};
 
         Iterator(const Iterator &it) = default;
 
@@ -162,13 +201,15 @@ public:
 
         pointer operator->() { return index; };
 
-        Iterator operator++() { return ++index; };
+        Iterator operator++() { ++index; return *this;};
 
         const Iterator operator++(int) {
             Iterator temp(*this);
             ++(*this);
             return temp;
         };
+
+        Vector<int,N> get_vector() {return array->from_index(index - array->data);}
 
         friend bool operator==(const Iterator &a, const Iterator &b) { return a.index == b.index; };
 
@@ -177,13 +218,14 @@ public:
 
     class ConstIterator {
         T *index;
+        ndArray *array;
     public:
         using iterator_category = std::forward_iterator_tag;
         using value_type = const T;
         using pointer = const T *;
         using reference = const T &;
 
-        ConstIterator(T *index) : index(index) {};
+        ConstIterator(T *index) : index(index), array(array) {};
 
         ConstIterator(const ConstIterator &it) = default;
 
@@ -207,22 +249,20 @@ public:
     };
 
     Iterator begin(){
-        return Iterator(data);
+        return Iterator(data, this);
     }
 
     Iterator end(){
-        return Iterator(data + num_el);
+        return Iterator(data + num_el, this);
     }
 
     ConstIterator cbegin(){
-        return ConstIterator(data);
+        return ConstIterator(data, this);
     }
 
     ConstIterator cend(){
-        return ConstIterator(data + num_el);
+        return ConstIterator(data + num_el, this);
     }
 };
-
-int testNdArray();
 
 #endif //ARX_NDARRAY_H

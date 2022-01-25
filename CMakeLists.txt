@@ -94,6 +94,7 @@ enable_testing()
 
 add_executable(
         hello_test
+        tests/utility/ndarray_test.cpp
         tests/utility/vector_test.cpp)
 target_link_libraries(
         hello_test
